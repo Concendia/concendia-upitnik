@@ -60,8 +60,8 @@ h1{font-weight:400;font-size:26px;margin:0 0 6px}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 const SB_URL="https://tefkacbqzynzrifgmtpn.supabase.co", SB_KEY="sb_publishable__XIJ9RUNhQzRC5Pi0uYWfg_5Ppkom5Y";
-const APP_URL=location.origin+"/concendia-upitnik/app/";
-const FORM_URL=location.origin+"/concendia-upitnik/";
+const APP_URL=new URL("./",location.href).href.split("#")[0];
+const FORM_URL=new URL("../",location.href).href.split("#")[0];
 const sb=supabase.createClient(SB_URL,SB_KEY,{auth:{flowType:"implicit",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const STATUSI=[["nova","Nova"],["pregled","Pregledano"],["poziv","Poziv"],["ponuda","Ponuda"],["izrada","U izradi"],["predat","Predat"],["odobreno","Odobreno"],["odbijeno","Odbijeno"],["nije_fit","Nije fit"],["odustanak","Odustanak"],["popunjava","Popunjava"]];
 const SL=Object.fromEntries(STATUSI), AKT=["nova","pregled","poziv","ponuda","izrada","predat"];

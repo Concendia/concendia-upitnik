@@ -1,8 +1,8 @@
 {
   "name": "Concendia prijave",
   "short_name": "Prijave",
-  "start_url": "/concendia-upitnik/app/",
-  "scope": "/concendia-upitnik/app/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0B0D0C",
   "theme_color": "#0B0D0C",

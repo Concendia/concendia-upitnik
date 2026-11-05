@@ -129,60 +129,60 @@ const Q = [
  {sec:"O tebi", id:"email", type:"email", req:true, q:"Tvoj mejl?", help:"Na ovaj mejl ti šaljem nacrt plana."},
  {sec:"O tebi", id:"tel", type:"tel", req:true, q:"Broj telefona?", help:"Za kratak poziv ako nešto nije jasno."},
  {sec:"O tebi", id:"kontakt", type:"multi", q:"Gde ti je najlakše da se čujemo?", opts:[["viber","Viber"],["whatsapp","WhatsApp"],["poziv","Običan poziv"],["mejl","Mejl"]]},
- {sec:"O tebi", id:"grad", type:"text", q:"U kom gradu živiš i gde bi radila?", help:"Npr. Užice, posao u Užicu i online."},
+ {sec:"O tebi", id:"grad", type:"text", q:"U kom gradu živiš i gde je posao?", help:"Npr. Užice, posao u Užicu i online."},
  {sec:"O tebi", id:"rodjena", type:"number", q:"Godina rođenja?", help:"Neki programi imaju uslove po godinama (npr. mlade preduzetnice do 35)."},
- {sec:"O tebi", id:"iskustvo", type:"textarea", q:"Šta si do sada radila?", help:"Škola, poslovi, godine iskustva u ovom poslu. Od ovoga pravim CV koji banka traži."},
+ {sec:"O tebi", id:"iskustvo", type:"textarea", q:"Koje je tvoje radno iskustvo?", help:"Škola, poslovi, godine iskustva u ovom poslu. Od ovoga pravim CV koji traže banke i fondovi."},
 
  // 2. Šta ti treba
  {sec:"Šta ti treba", id:"svrha", type:"multi", req:true, q:"Za šta ti treba biznis plan?", help:"Može više.", opts:[["kredit","Kredit u banci"],["grant","Grant ili subvencija"],["investitor","Investitor ili partner"],["sebe","Za sebe, da vidim da li se isplati"]]},
- {sec:"Šta ti treba", id:"banka", type:"single", show:WANTS_LOAN, q:"Da li si već razgovarala sa bankom?", opts:[["nlb","Da, sa NLB bankom"],["druga","Da, sa drugom bankom"],["ne","Još nisam"]]},
- {sec:"Šta ti treba", id:"banka_detalji", type:"textarea", show:a=>WANTS_LOAN(a)&&a.banka&&a.banka!=="ne", q:"Šta ti je banka rekla?", help:"Ime savetnice, ekspozitura, program (npr. SEF), koje dokumente traže, koji su rokovi."},
+ {sec:"Šta ti treba", id:"banka", type:"single", show:a=>WANTS_LOAN(a)||(a.svrha||[]).includes("grant"), q:"Da li je već bilo razgovora sa bankom ili fondom?", opts:[["nlb","Da, sa NLB bankom"],["druga","Da, sa drugom bankom"],["fond","Da, sa fondom ili programom za grantove"],["ne","Još ne"]]},
+ {sec:"Šta ti treba", id:"banka_detalji", type:"textarea", show:a=>a.banka&&a.banka!=="ne", q:"Šta su ti rekli?", help:"Kontakt osoba, ekspozitura ili program (npr. SEF), koja dokumenta traže, koji su rokovi."},
  {sec:"Šta ti treba", id:"rok", type:"date", q:"Do kada ti treba plan?", help:"Ako nemaš rok, preskoči."},
 
  // 3. Faza
  {sec:"Faza biznisa", id:"faza", type:"single", req:true, q:"U kojoj si fazi?", opts:[
    ["ideja","Imam ideju","Još ne radim i nemam firmu"],
-   ["neformalno","Već radim, bez firme","Imam kupce, ali nisam registrovana"],
-   ["pausal","Preduzetnica paušalka",""],
-   ["knjige","Preduzetnica koja vodi knjige",""],
+   ["neformalno","Već radim, bez firme","Imam kupce, ali bez registracije"],
+   ["pausal","Preduzetnički biznis, paušal",""],
+   ["knjige","Preduzetnički biznis, knjige",""],
    ["doo","D.o.o.",""],
    ["ne_znam","Ne znam tačno",""]]},
  {sec:"Faza biznisa", id:"firma", type:"text", show:HAS_FIRM, q:"Kako se zove firma?", help:"Pun naziv iz APR-a."},
  {sec:"Faza biznisa", id:"mb", type:"text", show:HAS_FIRM, q:"Matični broj i PIB?", help:"Ako nemaš pri ruci, preskoči. Vratiš se kasnije."},
- {sec:"Faza biznisa", id:"osnovana", type:"date", show:HAS_FIRM, q:"Kada je firma osnovana?", help:"Banke često traže bar 6 ili 12 meseci rada. Datum menja model kredita."},
+ {sec:"Faza biznisa", id:"osnovana", type:"date", show:HAS_FIRM, q:"Kada je firma osnovana?", help:"Mnogi krediti i grantovi traže bar 6 ili 12 meseci rada. Datum menja šta možeš da dobiješ."},
  {sec:"Faza biznisa", id:"delatnost", type:"text", show:NOT_IDEA, q:"Koja je tvoja delatnost?", help:"Šifra ako je znaš (npr. 9602 frizerski saloni), ili opiši rečima."},
  {sec:"Faza biznisa", id:"pdv", type:"single", show:HAS_FIRM, q:"Da li si u sistemu PDV-a?", opts:[["da","Da"],["ne","Ne"],["ne_znam","Ne znam"]]},
  {sec:"Faza biznisa", id:"prostor", type:"single", q:"Gde radiš ili ćeš raditi?", opts:[["kuca","Kod kuće"],["zakup","U iznajmljenom prostoru"],["svoj","U svom prostoru"],["online","Samo online"],["teren","Na terenu, kod klijenata"]]},
 
  // 4. Posao
- {sec:"Tvoj posao", id:"opis", type:"textarea", q:"Opiši posao u 3 rečenice.", help:"Šta radiš, za koga, i zašto bi te izabrali. Kao da pričaš drugarici."},
+ {sec:"Tvoj posao", id:"opis", type:"textarea", q:"Opiši posao u 3 rečenice.", help:"Šta radiš, za koga, i zašto bi te izabrali. Kao da objašnjavaš nekom bliskom."},
  {sec:"Tvoj posao", id:"ponuda", type:"textarea", q:"Šta tačno prodaješ i po kojoj ceni?", help:"Svaki proizvod ili usluga u svom redu. Npr. Šišanje 1.200 din, farbanje 3.500 din."},
  {sec:"Tvoj posao", id:"kupci", type:"textarea", q:"Ko su tvoji kupci?", help:"Ko plaća: žene 30-50 iz grada, firme, turisti... I koliko ih je mesečno, ako znaš."},
- {sec:"Tvoj posao", id:"top_kupci", type:"textarea", show:NOT_IDEA, q:"Ko su ti najveći kupci?", help:"Banka traži do 5 najvećih kupaca i koliki deo prihoda nose. Ako su fizička lica, napiši samo tip i procenat."},
+ {sec:"Tvoj posao", id:"top_kupci", type:"textarea", show:NOT_IDEA, q:"Ko su ti najveći kupci?", help:"Banke i fondovi traže do 5 najvećih kupaca i koliki deo prihoda nose. Ako su fizička lica, napiši samo tip i procenat."},
  {sec:"Tvoj posao", id:"dobavljaci", type:"textarea", q:"Od koga nabavljaš?", help:"Glavni dobavljači materijala, robe ili usluga. Do 5."},
  {sec:"Tvoj posao", id:"kanal", type:"multi", q:"Kako te kupci nalaze?", opts:[["preporuka","Preporuka"],["instagram","Instagram / Facebook"],["oglasi","Plaćeni oglasi"],["lokal","Lokal ili izlog"],["sajt","Sajt / Google"],["firme","Direktno firmama"],["jos","Još nemam kupce"]]},
- {sec:"Tvoj posao", id:"konkurencija", type:"textarea", q:"Ko još radi isto kao ti u tvom kraju?", help:"Imena ili broj. I po čemu si drugačija."},
- {sec:"Tvoj posao", id:"tim", type:"single", q:"Ko radi sa tobom?", opts:[["sama","Radim sama"],["porodica","Pomaže porodica"],["saradnici","Imam saradnike"],["zaposleni","Imam zaposlene"]]},
- {sec:"Tvoj posao", id:"tim_detalji", type:"textarea", show:a=>a.tim&&a.tim!=="sama", q:"Koliko ljudi i kako ih plaćaš?", help:"Ugovor, faktura, gotovina. Banka vidi sa računa kome ide novac, zato je bolje da znam unapred."},
+ {sec:"Tvoj posao", id:"konkurencija", type:"textarea", q:"Ko još radi isto kao ti u tvom kraju?", help:"Imena ili broj. I po čemu se razlikuješ."},
+ {sec:"Tvoj posao", id:"tim", type:"single", q:"Ko radi sa tobom?", opts:[["sama","Samo ja"],["porodica","Pomaže porodica"],["saradnici","Imam saradnike"],["zaposleni","Imam zaposlene"]]},
+ {sec:"Tvoj posao", id:"tim_detalji", type:"textarea", show:a=>a.tim&&a.tim!=="sama", q:"Koliko ljudi i kako ih plaćaš?", help:"Ugovor, faktura, gotovina. Na izvodu se vidi kome ide novac, zato je bolje da znam unapred."},
 
  // 5. Brojevi
- {sec:"Brojevi do sada", id:"_brojevi", type:"info", show:NOT_IDEA, q:"Sada brojevi.", help:"Ovo je najvažniji deo za banku. Okvirno je u redu. Ako nemaš brojeve pri ruci, preskoči i vrati se kad pogledaš izvode."},
- {sec:"Brojevi do sada", id:"prihod_mes", type:"months", show:NOT_IDEA, q:"Koliko ti je legalo na račun po mesecima?", help:"Poslednjih 12 meseci, u dinarima. Banka gleda svaki mesec posebno. Ako je neki mesec bio slab, ona računa po njemu. Zato mi treba svaki."},
+ {sec:"Brojevi do sada", id:"_brojevi", type:"info", show:NOT_IDEA, q:"Sada brojevi.", help:"Ovo je najvažniji deo plana. Daj tačne podatke, jer ih banka, fond ili investitor proverava. Ako nemaš brojeve pri ruci, preskoči i vrati se kad pogledaš izvode."},
+ {sec:"Brojevi do sada", id:"prihod_mes", type:"months", show:NOT_IDEA, q:"Koliko ti je legalo na račun po mesecima?", help:"Poslednjih 12 meseci, u dinarima. Banke i fondovi gledaju svaki mesec posebno, a slab mesec može da obori procenu. Zato mi treba svaki."},
  {sec:"Brojevi do sada", id:"racun", type:"single", show:NOT_IDEA, q:"Gde ti legne novac od kupaca?", opts:[["poslovni","Sve na poslovni račun"],["delom","Delom na poslovni, delom gotovina ili lični"],["licni","Na lični račun ili gotovina"]]},
  {sec:"Brojevi do sada", id:"banka_racun", type:"text", show:HAS_FIRM, q:"U kojoj banci ti je poslovni račun?"},
  {sec:"Brojevi do sada", id:"troskovi", type:"rows", show:NOT_IDEA, q:"Koliko te košta posao mesečno?", help:"Okvirno, u dinarima. Prazno ako nemaš taj trošak.", rows:["Kirija","Materijal i roba","Plate i saradnici","Porez i doprinosi","Knjigovođa","Struja, internet, telefon","Reklame","Programi i aplikacije","Ostalo"]},
  {sec:"Brojevi do sada", id:"licni_trosak", type:"single", show:NOT_IDEA, q:"Da li neke troškove posla plaćaš sa ličnog računa?", opts:[["ne","Ne, sve ide sa poslovnog"],["da","Da, deo"],["sve","Skoro sve"]]},
- {sec:"Brojevi do sada", id:"podizes", type:"number", show:NOT_IDEA, q:"Koliko mesečno uzimaš iz posla za sebe i kuću?", help:"U dinarima. Banka upoređuje ovaj broj sa planom, pa mora biti realan, ne skroman."},
+ {sec:"Brojevi do sada", id:"podizes", type:"number", show:NOT_IDEA, q:"Koliko mesečno uzimaš iz posla za sebe i kuću?", help:"U dinarima. Ovaj broj se poredi sa planom, pa mora biti realan, ne skroman."},
  {sec:"Brojevi do sada", id:"domacinstvo", type:"number", q:"Koliko mesečno troši tvoje domaćinstvo?", help:"Hrana, računi, deca, kredit za stan. U dinarima, okvirno. Ulazi u proračun da li možeš da vraćaš ratu."},
  {sec:"Brojevi do sada", id:"drugi_prihod", type:"text", q:"Imaš li još neki prihod?", help:"Plata, alimentacija, prihod partnera. Ako nemaš, preskoči."},
 
  // 6. Kredit
  {sec:"Kredit i ulaganje", id:"iznos", type:"number", req:false, q:"Koliko novca ti treba ukupno?", help:"U evrima. Uključi i svoj deo ako ga ulažeš."},
  {sec:"Kredit i ulaganje", id:"namena", type:"rows", q:"Na šta ide novac?", help:"Okvirni iznos u evrima za svaku stavku.", rows:["Oprema i mašine","Vozilo","Adaptacija prostora","Roba i materijal","Marketing i sajt","Obrtna sredstva (kirija, plate prvih meseci)","Ostalo"]},
- {sec:"Kredit i ulaganje", id:"profakture", type:"single", q:"Imaš li ponude ili profakture za to što kupuješ?", help:"Banka ih obično traži pre isplate.", opts:[["da","Da, za sve"],["delom","Za deo"],["ne","Još ne"]]},
+ {sec:"Kredit i ulaganje", id:"profakture", type:"single", q:"Imaš li ponude ili profakture za to što kupuješ?", help:"Banke i fondovi ih obično traže pre isplate novca.", opts:[["da","Da, za sve"],["delom","Za deo"],["ne","Još ne"]]},
  {sec:"Kredit i ulaganje", id:"ucesce", type:"number", q:"Koliko svog novca možeš da uložiš?", help:"U evrima. Nula je u redu, samo napiši 0."},
  {sec:"Kredit i ulaganje", id:"rata", type:"number", show:WANTS_LOAN, q:"Koliku ratu možeš mirno da plaćaš?", help:"U evrima mesečno. Mirno znači i u lošem mesecu."},
- {sec:"Kredit i ulaganje", id:"dugovi", type:"multi", q:"Šta od ovoga već imaš?", help:"Banka to vidi u Kreditnom birou. Bolje da znam pre nje.", opts:[["kredit","Kredit (stambeni, gotovinski, za auto)"],["kartica","Kreditnu karticu"],["minus","Dozvoljeni minus"],["jemac","Jemac sam nekome"],["kasnila","Kasnila sam sa ratama u poslednje 2 godine"],["nista","Ništa od ovoga"]]},
+ {sec:"Kredit i ulaganje", id:"dugovi", type:"multi", q:"Šta od ovoga već imaš?", help:"Banke to vide u Kreditnom birou. Bolje da znam unapred.", opts:[["kredit","Kredit (stambeni, gotovinski, za auto)"],["kartica","Kreditnu karticu"],["minus","Dozvoljeni minus"],["jemac","Jemac sam nekome"],["kasnila","Kašnjenje sa ratama u poslednje 2 godine"],["nista","Ništa od ovoga"]]},
  {sec:"Kredit i ulaganje", id:"dugovi_detalji", type:"textarea", show:a=>(a.dugovi||[]).some(x=>x!=="nista"), q:"Koliko mesečno plaćaš za to i do kada?"},
  {sec:"Kredit i ulaganje", id:"obezbedjenje", type:"multi", show:WANTS_LOAN, q:"Šta možeš da ponudiš kao garanciju?", opts:[["menice","Menice"],["vozilo","Vozilo"],["nekretnina","Nekretninu"],["jemac","Imam jemca"],["ne_znam","Ne znam"]]},
  {sec:"Kredit i ulaganje", id:"efekat", type:"textarea", q:"Šta se menja kad dobiješ novac?", help:"Konkretno. Npr. nova mašina, 2 klijentkinje dnevno više, prihod sa 150.000 na 220.000 din mesečno."},
@@ -190,15 +190,15 @@ const Q = [
  // 7. Plan
  {sec:"Plan za napred", id:"cilj", type:"number", q:"Koliki mesečni prihod očekuješ za godinu dana?", help:"U dinarima. Realno, ne idealno."},
  {sec:"Plan za napred", id:"sezona", type:"textarea", q:"Ima li tvoj posao jače i slabije mesece?", help:"Koje mesece i koliko slabije. Npr. jul i avgust upola manje."},
- {sec:"Plan za napred", id:"rizik", type:"textarea", q:"Šta te najviše brine?", help:"Šta bi moglo da pođe po zlu. Banka to traži u SWOT analizi, a iskren odgovor jača plan."},
+ {sec:"Plan za napred", id:"rizik", type:"textarea", q:"Šta te najviše brine?", help:"Šta bi moglo da pođe po zlu. Plan ima SWOT analizu, a iskren odgovor ga jača."},
  {sec:"Plan za napred", id:"zaposljavanje", type:"single", q:"Planiraš li da zaposliš nekog u naredne 2 godine?", opts:[["da","Da"],["mozda","Možda"],["ne","Ne"]]},
 
  // 8. Dokumenta
  {sec:"Dokumenta", id:"dokumenta", type:"multi", q:"Šta od dokumenata već imaš?", help:"Samo označi. Ne šalješ ništa sada.", opts:[["apr","Rešenje iz APR-a"],["pausal","Rešenje o paušalnom porezu"],["izvodi","Izvode sa računa za 6-12 meseci"],["kpo","KPO knjigu ili završni račun"],["poreska","Potvrdu da nemaš dug prema poreskoj"],["profakture","Profakture za kupovinu"],["ugovori","Ugovore sa kupcima ili dobavljačima"],["knjigovodja","Knjigovođu koji može brzo da pošalje papire"]]},
 
  // 9. Kraj
- {sec:"Za kraj", id:"nepoznato", type:"textarea", q:"Šta ti je najveća nepoznanica?", help:"Šta bi volela da ti neko objasni ili proveri."},
- {sec:"Za kraj", id:"izvor", type:"single", q:"Kako si čula za mene?", opts:[["milica","Miličina priča na Instagramu"],["preporuka","Preporuka"],["drugo","Drugo"]]},
+ {sec:"Za kraj", id:"nepoznato", type:"textarea", q:"Šta ti je najveća nepoznanica?", help:"Šta želiš da ti neko objasni ili proveri?"},
+ {sec:"Za kraj", id:"izvor", type:"single", q:"Odakle znaš za mene?", opts:[["milica","Miličina priča na Instagramu"],["preporuka","Preporuka"],["drugo","Drugo"]]},
  {sec:"Za kraj", id:"saglasnost", type:"consent", req:true, q:"Saglasnost", help:"Tvoje odgovore vidim samo ja (Milan Živković, Concendia) i koristim ih samo za tvoj biznis plan. Ne delim ih nikome bez tvoje dozvole. Možeš da tražiš da ih obrišem kad god želiš."},
  {id:"_kraj", type:"end"}
 ];
@@ -278,12 +278,12 @@ function render(){
     box.append(el("div",{},[el("span",{class:"brandmark",text:"Concendia"})]),el("h1",{text:"Upitnik za tvoj biznis plan"}),
       el("p",{class:"help",text:"Na osnovu tvojih odgovora pišem biznis plan za kredit, grant ili investitora. Pitanja su kratka. Treba ti oko 20 minuta, ali ne moraš sve odjednom."}),
       el("p",{class:"help",text:"Sve se čuva samo od sebe. Prekini kad hoćeš i vrati se preko svog ličnog linka. Pitanje koje ne znaš preskoči, pa ga dopuni kasnije."}),
-      el("div",{class:"note"},[el("b",{text:"Važno: "}),document.createTextNode("plan pišem samo na osnovu stvarnih brojeva. Banka ih proverava na izvodima. Ako tražiš plan koji lepo izgleda, a ne slaže se sa računom, ovo nije za tebe.")]));
-    next.textContent= isAnswered(Q[1]) ? "Nastavi gde sam stala" : "Počni";
+      el("div",{class:"note"},[el("b",{text:"Važno: "}),document.createTextNode("daj tačne podatke. Banka, fond ili investitor ih proverava na izvodima i papirima. Plan pišem samo na osnovu stvarnih brojeva. Ako tražiš plan koji samo lepo izgleda, ovo nije za tebe.")]));
+    next.textContent= isAnswered(Q[1]) ? "Nastavi tamo gde je stalo" : "Počni";
   } else if(q.type==="end"){
     const s=stats();
-    box.append(el("h1",{text: S.submitted? "Hvala, poslato." : "Skoro gotovo."}),
-      el("p",{class:"help",text:`Odgovorila si na ${s.done} od ${s.total} pitanja.`+(s.done<s.total?" Ostala možeš da dopuniš i posle slanja.":"")}),
+    box.append(el("h1",{text: S.submitted? "Hvala, poslato." : "Još jedan korak."}),
+      el("p",{class:"help",text:`Odgovoreno je ${s.done} od ${s.total} pitanja.`+(s.done<s.total?" Ostala možeš da dopuniš i posle slanja.":"")}),
       el("p",{class:"help",text:"Javiću ti se u roku od 3 radna dana sa sledećim korakom i spiskom onoga što još fali."}));
     box.append(linkBox());
     next.textContent= S.submitted? "Pogledaj odgovore" : "Pošalji";

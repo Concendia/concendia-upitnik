@@ -1,0 +1,182 @@
+<!doctype html><html lang="sr-Latn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B0D0C"><meta name="robots" content="noindex">
+<title>Concendia prijave</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="../brand/znak.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+@font-face{font-family:"Questrial";font-display:swap;src:url(../fonts/questrial-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+1E00-1EFF}
+@font-face{font-family:"Questrial";font-display:swap;src:url(../fonts/questrial-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+:root{color-scheme:dark;--ink:#F2EDE1;--ink2:#C4C9BF;--muted:#8C968E;--gold:#C9A24A;--good:#7CC59D;--warn:#E0B45C;--bad:#E58A7E;--glass:rgba(9,15,12,.74);--line:rgba(242,237,225,.12);--field:rgba(242,237,225,.10)}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;color:var(--ink);font-family:"Questrial","Century Gothic",system-ui,sans-serif;font-size:16px;line-height:1.45;background:#050705 url(../bg-sm.jpg) center 62%/cover no-repeat fixed;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,6,5,.78),rgba(4,6,5,.6) 45%,rgba(4,6,5,.85))}
+.wrap{max-width:640px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) calc(30px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px))}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+header img{height:22px}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{background:transparent;border:1px solid rgba(242,237,225,.5);border-radius:12px;padding:9px 14px;color:var(--ink)}
+.btn.primary{background:var(--ink);color:#0B0D0C;border-color:var(--ink)}
+.btn.sm{padding:6px 11px;font-size:14px}
+.btn:disabled{opacity:.5}
+.card{background:var(--glass);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:18px;padding:16px}
+input,textarea,select{font:inherit;color:var(--ink);background:var(--field);border:1px solid rgba(242,237,225,.16);border-radius:12px;padding:11px 12px;width:100%}
+textarea{min-height:70px}
+h1{font-weight:400;font-size:26px;margin:0 0 6px}
+.help{color:var(--ink2);margin:6px 0 14px}
+.seg{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+.seg button{border:1px solid rgba(242,237,225,.2);background:rgba(9,15,12,.6);border-radius:999px;padding:7px 13px;font-size:14px;white-space:nowrap;color:var(--ink2)}
+.seg button[aria-pressed="true"]{border-color:var(--gold);color:var(--ink);background:rgba(201,162,74,.18)}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:var(--glass);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.item.late{border-left:3px solid var(--bad)}.item.new{border-left:3px solid var(--gold)}
+.sc{flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:17px;border:2px solid var(--muted);font-variant-numeric:tabular-nums}
+.sc.visoke{border-color:var(--good);color:var(--good)}.sc.srednje{border-color:var(--warn);color:var(--warn)}.sc.niske{border-color:var(--bad);color:var(--bad)}
+.it{min-width:0;flex:1}.nm{font-size:16.5px}.sub{color:var(--muted);font-size:13px}
+.pill{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid rgba(242,237,225,.25);margin-top:3px}
+.pill.nova{color:var(--gold);border-color:rgba(201,162,74,.6)}
+.flag{display:inline-block;font-size:11.5px;padding:1px 7px;border-radius:6px;background:rgba(229,138,126,.16);color:var(--bad);margin:4px 4px 0 0}
+.flag.w{background:rgba(224,180,92,.16);color:var(--warn)}
+.empty{text-align:center;color:var(--ink2)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+.bar a,.bar button{flex:1 1 40%;text-align:center;text-decoration:none;color:var(--ink);border:1px solid rgba(242,237,225,.4);border-radius:12px;padding:10px;font-size:15px;background:rgba(9,15,12,.5)}
+.big{display:flex;align-items:center;gap:14px;margin:12px 0}
+.big .sc{width:72px;height:72px;font-size:26px;border-width:3px}
+.why{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px}
+.why ul{margin:4px 0 0;padding-left:16px}
+.sec{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:16px 0 8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{border:1px solid rgba(242,237,225,.2);background:transparent;border-radius:999px;padding:6px 11px;font-size:13.5px;color:var(--ink2)}
+.chips button[aria-pressed="true"]{border-color:var(--gold);color:var(--ink);background:rgba(201,162,74,.18)}
+.qa{margin:8px 0;font-size:14.5px}.qa .q{color:var(--muted);font-size:12.5px}.qa .a{white-space:pre-wrap;overflow-wrap:anywhere}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:#14201A;border:1px solid var(--gold);padding:10px 16px;border-radius:12px;z-index:9;font-size:14px}
+.banner{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.banner span{font-size:14px;color:var(--ink2)}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:11.5px}
+.mgrid div{background:rgba(242,237,225,.06);border-radius:6px;padding:3px 5px}.mgrid b{display:block;font-weight:400;font-size:13px}.mgrid .z{color:var(--bad)}
+</style></head><body><div class="wrap" id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const SB_URL="https://tefkacbqzynzrifgmtpn.supabase.co", SB_KEY="sb_publishable__XIJ9RUNhQzRC5Pi0uYWfg_5Ppkom5Y";
+const APP_URL=location.origin+"/concendia-upitnik/app/";
+const FORM_URL=location.origin+"/concendia-upitnik/";
+const sb=supabase.createClient(SB_URL,SB_KEY,{auth:{flowType:"implicit",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const STATUSI=[["nova","Nova"],["pregled","Pregledano"],["poziv","Poziv"],["ponuda","Ponuda"],["izrada","U izradi"],["predat","Predat"],["odobreno","Odobreno"],["odbijeno","Odbijeno"],["nije_fit","Nije fit"],["odustanak","Odustanak"],["popunjava","Popunjava"]];
+const SL=Object.fromEntries(STATUSI), AKT=["nova","pregled","poziv","ponuda","izrada","predat"];
+const FAZA={ideja:"Ideja",neformalno:"Bez firme",pausal:"Paušal",knjige:"Knjige",doo:"D.o.o.",ne_znam:"Ne zna"};
+const SVRHA={kredit:"Kredit",grant:"Grant",investitor:"Investitor",sebe:"Za sebe"};
+let ROWS=[], view="akcija", open=null;
+const $app=document.getElementById("app");
+const el=(t,a={},k=[])=>{const e=document.createElement(t);for(const[x,v]of Object.entries(a)){if(x==="text")e.textContent=v;else if(x.startsWith("on"))e.addEventListener(x.slice(2),v);else if(v!=null&&v!==false)e.setAttribute(x,v===true?"":v)}(Array.isArray(k)?k:[k]).forEach(c=>c!=null&&e.append(c));return e};
+const toast=m=>{const t=el("div",{class:"toast",role:"status",text:m});document.body.append(t);setTimeout(()=>t.remove(),2500)};
+const st=r=>r.status||(r.submitted?"nova":"popunjava");
+const d0=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
+const rokS=r=>{if(!r.rok)return null;const d=new Date(r.rok);d.setHours(0,0,0,0);return d<d0()?"late":(+d===+d0()?"today":"f")};
+const fmtD=s=>s?new Date(s).toLocaleDateString("sr-Latn",{day:"numeric",month:"numeric"}):"";
+const eur=n=>n?Number(n).toLocaleString("sr-Latn")+" €":"";
+const needs=r=>{const s=st(r),k=rokS(r);return (AKT.includes(s)&&(k==="late"||k==="today"))||(s==="nova"&&!r.sledeci_korak)};
+const digits=t=>String(t||"").replace(/[^0-9+]/g,"").replace(/^0/,"+381");
+function flags(a){const f=[];const v=Object.values(a.prihod_mes||{}).filter(x=>String(x).trim()!=="").map(Number);
+  if(v.length>=3){const av=v.reduce((s,x)=>s+x,0)/v.length;if(v.some(x=>x===0))f.push(["Mesec bez prihoda","b"]);else if(v.filter(x=>x<av*.7).length>=2)f.push(["Neujednačen prihod","w"])}
+  if(a.racun==="licni")f.push(["Novac van računa","b"]);else if(a.racun==="delom")f.push(["Deo novca van računa","w"]);
+  if((a.dugovi||[]).includes("kasnila"))f.push(["Kašnjenje sa ratama","b"]);
+  if((a.svrha||[]).includes("kredit")&&a.profakture==="ne")f.push(["Nema profaktura","w"]);return f}
+const scEl=(o,big)=>el("div",{class:"sc "+((o&&o.nivo)||""),"aria-label":"Šanse "+((o&&o.score)??"nepoznate")},String((o&&o.score)??"–"));
+
+async function load(){
+  const {data,error}=await sb.rpc("bp_app_list");
+  if(error){ if(/dozvoljeno/.test(error.message)) return renderDenied(); toast("Nije učitano: "+error.message.slice(0,80)); return }
+  ROWS=Array.isArray(data)?data:[]; route();
+}
+function route(){ const m=(location.hash||"").match(/^#t([a-z0-9]{10,})$/); if(m&&ROWS.find(r=>r.token===m[1])) renderDetail(m[1]); else renderList() }
+window.addEventListener("hashchange",()=>{ if(ROWS.length) route() });
+
+function header(extra){ return el("header",{},[el("img",{src:"../brand/logo-svetli.svg",alt:"Concendia"}),extra||el("button",{class:"btn sm",type:"button",onclick:load},"Osveži")]) }
+
+async function pushBanner(){
+  if(!("serviceWorker" in navigator)||!("PushManager" in window)) return null;
+  const reg=await navigator.serviceWorker.ready; const sub=await reg.pushManager.getSubscription();
+  if(sub&&Notification.permission==="granted") return null;
+  if(Notification.permission==="denied") return el("div",{class:"card banner"},el("span",{text:"Obaveštenja su blokirana. Uključi ih u podešavanjima telefona za ovu aplikaciju."}));
+  return el("div",{class:"card banner"},[el("span",{text:"Uključi obaveštenja za nove prijave."}),el("button",{class:"btn sm primary",type:"button",onclick:enablePush},"Uključi")]);
+}
+function b64u(s){const p="=".repeat((4-s.length%4)%4);const b=atob((s+p).replace(/-/g,"+").replace(/_/g,"/"));return Uint8Array.from(b,c=>c.charCodeAt(0))}
+async function enablePush(){
+  try{
+    const perm=await Notification.requestPermission(); if(perm!=="granted"){toast("Obaveštenja nisu dozvoljena");return}
+    const {data:key,error:e1}=await sb.rpc("bp_app_vapid"); if(e1||!key) throw e1||new Error("nema ključa");
+    const reg=await navigator.serviceWorker.ready;
+    const sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(key)});
+    const j=sub.toJSON(); j.ua=navigator.userAgent;
+    const {error}=await sb.rpc("bp_app_subscribe",{s:j}); if(error) throw error;
+    toast("Obaveštenja su uključena"); renderList();
+  }catch(e){ toast("Nije uspelo: "+String(e.message||e).slice(0,80)) }
+}
+
+async function renderList(){
+  open=null; const ak=ROWS.filter(needs), aktivni=ROWS.filter(r=>AKT.includes(st(r)));
+  const sets={akcija:ak,aktivni,svi:ROWS};
+  const rows=[...sets[view]].sort((a,b)=>{const k=r=>(rokS(r)==="late"?0:rokS(r)==="today"?1:st(r)==="nova"?2:3);return k(a)-k(b)||((b.ocena?.score||0)-(a.ocena?.score||0))});
+  const seg=el("div",{class:"seg"},[["akcija","Za akciju",ak.length],["aktivni","Aktivni",aktivni.length],["svi","Svi",ROWS.length]].map(([k,l,n])=>el("button",{type:"button","aria-pressed":String(view===k),onclick:()=>{view=k;renderList()}},`${l} ${n}`)));
+  const list=el("div",{class:"list"},rows.length?rows.map(r=>{const a=r.answers||{},k=rokS(r),f=flags(a);
+    return el("button",{class:"item "+(k==="late"?"late":st(r)==="nova"&&!r.sledeci_korak?"new":""),type:"button",onclick:()=>{location.hash="#t"+r.token}},[scEl(r.ocena),
+      el("div",{class:"it"},[el("div",{class:"nm",text:a.ime||"Bez imena"}),el("div",{class:"sub",text:[FAZA[a.faza],(a.svrha||[]).map(x=>SVRHA[x]).join(", "),eur(a.iznos)].filter(Boolean).join(" · ")}),
+        el("div",{},[el("span",{class:"pill "+st(r),text:SL[st(r)]}),r.sledeci_korak?el("span",{class:"sub",text:"  "+r.sledeci_korak+(r.rok?" · "+(k==="late"?"kasni ":"")+fmtD(r.rok):"")}):null]),
+        f.length?el("div",{},f.slice(0,2).map(([t,s])=>el("span",{class:"flag"+(s==="w"?" w":""),text:t}))):null])])}):[el("div",{class:"card empty",text:view==="akcija"?"Ništa ne čeka. Kad stigne nova prijava, dobićeš obaveštenje.":"Nema prijava."})]);
+  const pb=await pushBanner();
+  $app.replaceChildren(header(),pb||"",seg,list);
+}
+
+function renderDetail(tok){
+  const r=ROWS.find(x=>x.token===tok); if(!r) return renderList(); open=tok;
+  const a=r.answers||{}, o=r.ocena||{}, f=flags(a); let status=st(r);
+  const back=el("button",{class:"btn sm",type:"button",onclick:()=>{history.replaceState(null,"",location.pathname);renderList()}},"‹ Nazad");
+  const tel=digits(a.tel);
+  const contact=el("div",{class:"bar"},[
+    a.tel?el("a",{href:"tel:"+tel},"Pozovi"):null,
+    a.tel?el("a",{href:"https://wa.me/"+tel.replace("+",""),target:"_blank",rel:"noopener"},"WhatsApp"):null,
+    a.tel?el("a",{href:"viber://chat?number="+encodeURIComponent(tel)},"Viber"):null,
+    a.email?el("a",{href:"mailto:"+a.email},"Mejl"):null,
+    el("button",{type:"button",onclick:async()=>{const l=FORM_URL+"#k"+tok;try{await navigator.clipboard.writeText(l);toast("Link za dopunu kopiran")}catch(e){toast(l)}}},"Link za dopunu")]);
+  const chips=el("div",{class:"chips"},STATUSI.filter(([k])=>k!=="popunjava").map(([k,l])=>el("button",{type:"button","aria-pressed":String(status===k),onclick:e=>{status=k;chips.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed","false"));e.currentTarget.setAttribute("aria-pressed","true")}},l)));
+  const nk=el("input",{type:"text",value:r.sledeci_korak||"",placeholder:"Sledeći korak"});
+  const rk=el("input",{type:"date",value:r.rok||""});
+  const bl=el("textarea",{placeholder:"Beleška"});
+  const save=el("button",{class:"btn primary",type:"button",style:"width:100%;margin-top:10px"},"Sačuvaj");
+  save.addEventListener("click",async()=>{save.disabled=true;const {error}=await sb.rpc("bp_app_set",{p:{token:tok,status,sledeci_korak:nk.value,rok:rk.value,beleska:bl.value.trim()}});
+    if(error){toast("Nije sačuvano: "+error.message.slice(0,80));save.disabled=false;return} toast("Sačuvano"); await load(); });
+  const qa=(q,v)=>v?el("div",{class:"qa"},[el("div",{class:"q",text:q}),el("div",{class:"a",text:v})]):null;
+  const nam=Object.entries(a.namena||{}).filter(([k,v])=>String(v).trim()!=="").map(([k,v])=>k+": "+Number(v).toLocaleString("sr-Latn")+" €").join("\n");
+  const months=a.prihod_mes&&Object.keys(a.prihod_mes).length?el("div",{class:"mgrid"},Object.entries(a.prihod_mes).sort().map(([k,v])=>{const n=String(v).trim()===""?null:Number(v);return el("div",{},[document.createTextNode(new Date(k+"-01").toLocaleDateString("sr-Latn",{month:"short"})),el("b",{class:n===0?"z":"",text:n==null?"–":(n/1000).toLocaleString("sr-Latn",{maximumFractionDigits:0})+"k"})])})):null;
+  $app.replaceChildren(header(back),
+    el("div",{class:"card"},[el("h1",{text:a.ime||"Bez imena"}),el("div",{class:"sub",text:[a.grad,FAZA[a.faza],(a.svrha||[]).map(x=>SVRHA[x]).join(", "),eur(a.iznos)].filter(Boolean).join(" · ")}),
+      contact,
+      el("div",{class:"big"},[scEl(o,true),el("div",{},[el("div",{text:o.nivo?("Šanse: "+o.nivo):"Šanse nepoznate"}),el("div",{class:"sub",text:"preliminarno, iz odgovora"})])]),
+      el("div",{class:"why"},[el("div",{},[el("div",{class:"sub",text:"Ide u prilog"}),el("ul",{},(o.plus||[]).map(x=>el("li",{text:x})))]),el("div",{},[el("div",{class:"sub",text:"Proveri"}),el("ul",{},(o.minus||[]).map(x=>el("li",{text:x})))])]),
+      f.length?el("div",{},f.map(([t,s])=>el("span",{class:"flag"+(s==="w"?" w":""),text:t}))):null]),
+    el("div",{class:"sec",text:"Sledeći korak"}),
+    el("div",{class:"card"},[chips,el("div",{class:"grid2"},[nk,rk]),el("div",{style:"margin-top:8px"},bl),save]),
+    el("div",{class:"sec",text:"Ukratko"}),
+    el("div",{class:"card"},[qa("Posao",a.opis),qa("Šta prodaje",a.ponuda),qa("Kupci",a.kupci),qa("Na šta ide novac",nam),qa("Šta se menja",a.efekat),months?el("div",{class:"qa"},[el("div",{class:"q",text:"Prihod po mesecima (din)"}),months]):null,qa("Rok",a.rok?fmtD(a.rok):""),qa("Najveća nepoznanica",a.nepoznato),
+      el("div",{class:"note",text:"Svi odgovori i detaljna analiza su u CRM-u na računaru."})]));
+  window.scrollTo(0,0);
+}
+
+function renderLogin(msg){
+  const em=el("input",{type:"email",id:"em",placeholder:"tvoj mejl",autocomplete:"email",value:"program.granice@gmail.com"});
+  const b=el("button",{class:"btn primary",type:"button",style:"width:100%;margin-top:10px"},"Pošalji link za prijavu");
+  b.addEventListener("click",async()=>{b.disabled=true;const {error}=await sb.auth.signInWithOtp({email:em.value.trim(),options:{emailRedirectTo:APP_URL,shouldCreateUser:true}});
+    if(error){toast("Greška: "+error.message.slice(0,80));b.disabled=false;return} renderLogin("Link je poslat na "+em.value.trim()+". Otvori ga na ovom telefonu.")});
+  $app.replaceChildren(header(el("span")),el("div",{class:"card"},[el("h1",{text:"Prijave za biznis plan"}),el("p",{class:"help",text:msg||"Prijavi se mejlom. Pristup ima samo vlasnik."}),em,b]));
+}
+function renderDenied(){
+  $app.replaceChildren(header(el("button",{class:"btn sm",type:"button",onclick:async()=>{await sb.auth.signOut();renderLogin()}},"Odjavi se")),el("div",{class:"card"},[el("h1",{text:"Nemaš pristup"}),el("p",{class:"help",text:"Ovaj nalog nema pravo da vidi prijave."})]));
+}
+
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+sb.auth.onAuthStateChange((ev,session)=>{ if(ev==="SIGNED_IN"&&session&&/access_token/.test(location.hash)) history.replaceState(null,"",location.pathname) });
+(async()=>{ const {data:{session}}=await sb.auth.getSession(); if(session) load(); else renderLogin() })();
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"&&ROWS.length&&!open) load() });
+</script></body></html>

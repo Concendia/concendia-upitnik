@@ -68,9 +68,37 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-
 .pill.miss{background:var(--warn-soft);color:var(--warn)}
 .err{color:var(--warn);font-size:15px;margin-top:8px;min-height:1px}
 .demo{font-size:12.5px;color:var(--muted);text-align:center;padding:6px 0 0}
+
+/* Stakleni sloj preko tamnog zelenila */
+:root{--glass:rgba(16,28,22,.46);--glass-strong:rgba(12,20,16,.62);--glass-line:rgba(242,237,225,.10);--field:rgba(242,237,225,.10);--field-line:rgba(242,237,225,.16);--cream:#F2EDE1}
+body{background:#070A08}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;display:block}
+.top{background:linear-gradient(to bottom,rgba(7,10,8,.78),rgba(7,10,8,0));-webkit-backdrop-filter:none;backdrop-filter:none}
+body::before{background:#070A08}
+.foot{background:rgba(7,10,8,.55);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--glass-line)}
+.q{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(120%);backdrop-filter:blur(22px) saturate(120%);border:1px solid var(--glass-line);border-radius:20px;padding:26px 20px}
+h1,h2{font-weight:400;letter-spacing:0}
+h1{font-size:34px;color:var(--cream)}
+h1 em{font-style:normal;color:var(--accent)}
+.help{color:rgba(242,237,225,.72)}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],textarea,select{background:var(--field);border:1px solid var(--field-line);border-radius:12px;color:var(--cream)}
+input::placeholder,textarea::placeholder{color:rgba(242,237,225,.45)}
+.opt{background:rgba(242,237,225,.07);border:1px solid var(--field-line);border-radius:12px}
+.opt:hover{background:rgba(242,237,225,.11)}
+.opt[aria-pressed="true"]{background:rgba(201,162,74,.14);border-color:var(--accent);box-shadow:none}
+.over button{background:rgba(242,237,225,.07);border:1px solid var(--field-line);border-radius:12px}
+.btn{border-radius:12px;background:transparent;border:1px solid rgba(242,237,225,.55);color:var(--cream)}
+.btn.primary{background:var(--cream);color:#0B0D0C;border-color:var(--cream)}
+.btn.primary:hover{background:#fff}
+.bar{background:rgba(242,237,225,.14)}
+.note{background:rgba(201,162,74,.10);border:1px solid rgba(201,162,74,.35)}
+.num{color:var(--accent);letter-spacing:.08em}
+.brandmark{display:inline-block;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:2px 10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+@media (max-width:420px){.q{padding:22px 16px;border-radius:18px}h1{font-size:30px}}
 </style>
 
 </head><body>
+<canvas id="bg" aria-hidden="true"></canvas>
 <div class="app">
   <header class="top">
     <div class="toprow">
@@ -98,7 +126,7 @@ const Q = [
  {id:"_intro", type:"intro"},
  // 1. O tebi
  {sec:"O tebi", id:"ime", type:"text", req:true, q:"Kako se zoveš?", help:"Ime i prezime."},
- {sec:"O tebi", id:"email", type:"email", req:true, q:"Tvoj mejl?", help:"Na ovaj mejl ti šaljem lični link za nastavak i nacrt plana."},
+ {sec:"O tebi", id:"email", type:"email", req:true, q:"Tvoj mejl?", help:"Na ovaj mejl ti šaljem nacrt plana."},
  {sec:"O tebi", id:"tel", type:"tel", req:true, q:"Broj telefona?", help:"Za kratak poziv ako nešto nije jasno."},
  {sec:"O tebi", id:"kontakt", type:"multi", q:"Gde ti je najlakše da se čujemo?", opts:[["viber","Viber"],["whatsapp","WhatsApp"],["poziv","Običan poziv"],["mejl","Mejl"]]},
  {sec:"O tebi", id:"grad", type:"text", q:"U kom gradu živiš i gde bi radila?", help:"Npr. Užice, posao u Užicu i online."},
@@ -247,7 +275,7 @@ function render(){
   back.disabled = S.i===0; back.textContent="Nazad";
   const box=el("div",{class:"q"});
   if(q.type==="intro"){
-    box.append(el("h1",{text:"Upitnik za tvoj biznis plan"}),
+    box.append(el("div",{},[el("span",{class:"brandmark",text:"Concendia"})]),el("h1",{text:"Upitnik za tvoj biznis plan"}),
       el("p",{class:"help",text:"Na osnovu tvojih odgovora pišem biznis plan za kredit, grant ili investitora. Pitanja su kratka. Treba ti oko 20 minuta, ali ne moraš sve odjednom."}),
       el("p",{class:"help",text:"Sve se čuva samo od sebe. Prekini kad hoćeš i vrati se preko svog ličnog linka. Pitanje koje ne znaš preskoči, pa ga dopuni kasnije."}),
       el("div",{class:"note"},[el("b",{text:"Važno: "}),document.createTextNode("plan pišem samo na osnovu stvarnih brojeva. Banka ih proverava na izvodima. Ako tražiš plan koji lepo izgleda, a ne slaže se sa računom, ovo nije za tebe.")]));
@@ -381,4 +409,49 @@ if(!CONFIG.supabaseUrl) document.getElementById("demo").textContent="Probna verz
 })();
 </script>
 
+
+<script>
+/* Pozadina: tamne paprati, nacrtane jednom, zamućene */
+(function(){
+  const c=document.getElementById('bg'); if(!c||!c.getContext) return;
+  const ctx=c.getContext('2d'); let seed=7;
+  const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
+  function frond(x,y,len,ang,w,col){
+    ctx.save();ctx.translate(x,y);ctx.rotate(ang);
+    ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=Math.max(1.5,w*.06);
+    ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(len*.12,-len*.5,0,-len);ctx.stroke();
+    const n=Math.floor(len/(w*.32));
+    for(let i=2;i<n;i++){
+      const t=i/n, py=-len*t, px=Math.sin(t*Math.PI)*len*.06, lw=w*(1-t*.8)*(.85+rnd()*.3);
+      for(const s of [-1,1]){
+        ctx.beginPath();ctx.moveTo(px,py);
+        ctx.quadraticCurveTo(px+s*lw*.5,py-lw*.28,px+s*lw,py-lw*.42);
+        ctx.quadraticCurveTo(px+s*lw*.5,py-lw*.08,px,py+lw*.06);ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+  function draw(){
+    const dpr=Math.min(2,window.devicePixelRatio||1), W=innerWidth, H=innerHeight;
+    c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);seed=7;
+    const g=ctx.createRadialGradient(W*.55,H*.35,0,W*.5,H*.5,Math.max(W,H)*.85);
+    g.addColorStop(0,'#14301F');g.addColorStop(.55,'#0B1A12');g.addColorStop(1,'#050806');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    const layers=[{b:14,a:.55,c:['#163A26','#1C4A2E'],k:7},{b:5,a:.75,c:['#1F5234','#2A6B40'],k:5},{b:1.2,a:.9,c:['#2F7A47','#3B8F55'],k:3}];
+    const S=Math.max(W,H);
+    layers.forEach(L=>{
+      ctx.filter='blur('+L.b+'px)';ctx.globalAlpha=L.a;
+      for(let i=0;i<L.k;i++){
+        const x=rnd()*W, y=H*(.55+rnd()*.7), len=S*(.45+rnd()*.5), ang=(rnd()-.5)*1.6, w=S*(.07+rnd()*.06);
+        frond(x,y,len,ang,w,L.c[i%2]);
+      }
+    });
+    ctx.filter='none';ctx.globalAlpha=1;
+    const v=ctx.createRadialGradient(W/2,H/2,S*.2,W/2,H/2,S*.8);
+    v.addColorStop(0,'rgba(5,8,6,.15)');v.addColorStop(1,'rgba(5,8,6,.85)');
+    ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
+  }
+  let t;draw();addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200)});
+})();
+</script>
 </body></html>

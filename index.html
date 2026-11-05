@@ -1,0 +1,393 @@
+<!doctype html><html lang="sr-Latn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>Upitnik za biznis plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: jedan ekran = jedno pitanje; gornja traka napretka, dno sa dugmićima palcem dostižno */
+:root{
+  --bg:#F3F5F7; --card:#FFFFFF; --ink:#18212B; --ink2:#55606B; --muted:#8A949E;
+  --line:rgba(24,33,43,.12); --line2:rgba(24,33,43,.22);
+  --accent:#1E5E5B; --accent-ink:#FFFFFF; --accent-soft:#E2EFEE;
+  --warn:#9A5B12; --warn-soft:#F7EBDB; --good:#2E7350;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Sans 3", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12171C; --card:#1A2128; --ink:#EAF0F3; --ink2:#AEB9C2; --muted:#7D8993;
+  --line:rgba(234,240,243,.10); --line2:rgba(234,240,243,.20);
+  --accent:#6FC2BC; --accent-ink:#0E1E1D; --accent-soft:#1D3332;
+  --warn:#E2A65C; --warn-soft:#33281A; --good:#7CC59D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171C; --card:#1A2128; --ink:#EAF0F3; --ink2:#AEB9C2; --muted:#7D8993;
+  --line:rgba(234,240,243,.10); --line2:rgba(234,240,243,.20);
+  --accent:#6FC2BC; --accent-ink:#0E1E1D; --accent-soft:#1D3332;
+  --warn:#E2A65C; --warn-soft:#33281A; --good:#7CC59D; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.app{min-height:100%;display:flex;flex-direction:column;max-width:640px;margin:0 auto;padding-block:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:14px 0 10px;z-index:5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;color:var(--ink2)}
+.sec{font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:12px;color:var(--accent)}
+.bar{height:4px;background:var(--line);border-radius:4px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.linkbtn{background:none;border:0;color:var(--ink2);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer;padding:6px 0}
+main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:18px 0 24px}
+.q{animation:in .25s ease}
+@keyframes in{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.q{animation:none}.bar i{transition:none}}
+.num{font-size:14px;color:var(--muted);margin-bottom:6px;font-variant-numeric:tabular-nums}
+h1,h2{font-family:var(--display);font-weight:650;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:30px;line-height:1.15}
+h2{font-size:24px;line-height:1.22}
+.help{color:var(--ink2);margin:10px 0 0;font-size:16px;max-width:60ch}
+.field{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],textarea,select{
+  width:100%;font:inherit;font-size:18px;color:var(--ink);background:var(--card);border:1px solid var(--line2);border-radius:10px;padding:13px 14px}
+textarea{min-height:130px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line2);border-radius:10px;padding:13px 14px;cursor:pointer}
+.opt .k{flex:none;width:26px;height:26px;border-radius:6px;border:1px solid var(--line2);display:grid;place-items:center;font-size:13px;color:var(--ink2);font-weight:600}
+.opt small{display:block;color:var(--ink2);font-size:14px}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt[aria-pressed="true"] .k{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.opt:focus-visible,.btn:focus-visible,.linkbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.months{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.months label{display:flex;flex-direction:column;font-size:13px;color:var(--ink2);gap:3px}
+.months input{font-size:16px;padding:10px}
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:8px}
+.row-label{font-size:15px;color:var(--ink2);align-self:center}
+.hint{font-size:14px;color:var(--muted)}
+.foot{position:sticky;bottom:0;background:var(--bg);padding:12px 0 calc(14px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;align-items:center;border-top:1px solid var(--line)}
+.btn{font:inherit;font-weight:600;border-radius:10px;padding:13px 20px;border:1px solid var(--line2);background:var(--card);color:var(--ink);cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);margin-left:auto}
+.btn:disabled{opacity:.45;cursor:default}
+.saved{font-size:13px;color:var(--muted)}
+.note{background:var(--warn-soft);color:var(--ink);border-radius:10px;padding:12px 14px;font-size:15px;margin-top:16px}
+.note b{color:var(--warn)}
+.linkbox{display:flex;gap:8px;margin-top:14px}
+.linkbox input{font-size:14px;padding:11px}
+.over{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.over button{display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;font:inherit;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--ink);cursor:pointer}
+.pill{font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill.done{background:var(--accent-soft);color:var(--accent)}
+.pill.miss{background:var(--warn-soft);color:var(--warn)}
+.err{color:var(--warn);font-size:15px;margin-top:8px;min-height:1px}
+.demo{font-size:12.5px;color:var(--muted);text-align:center;padding:6px 0 0}
+</style>
+
+</head><body>
+<div class="app">
+  <header class="top">
+    <div class="toprow">
+      <span class="sec" id="secname">Upitnik za biznis plan</span>
+      <button class="linkbtn" id="overviewBtn" type="button">Pregled i nastavak</button>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+  </header>
+  <main id="main" aria-live="polite"></main>
+  <footer class="foot">
+    <button class="btn" id="back" type="button">Nazad</button>
+    <span class="saved" id="saved"></span>
+    <button class="btn primary" id="next" type="button">Dalje</button>
+  </footer>
+  <div class="demo" id="demo"></div>
+</div>
+
+<script>
+/* ---------- Pitanja ---------- */
+const NOT_IDEA = a => a.faza && a.faza !== "ideja";
+const HAS_FIRM = a => ["pausal","knjige","doo"].includes(a.faza);
+const WANTS_LOAN = a => (a.svrha||[]).includes("kredit");
+
+const Q = [
+ {id:"_intro", type:"intro"},
+ // 1. O tebi
+ {sec:"O tebi", id:"ime", type:"text", req:true, q:"Kako se zoveš?", help:"Ime i prezime."},
+ {sec:"O tebi", id:"email", type:"email", req:true, q:"Tvoj mejl?", help:"Na ovaj mejl ti šaljem lični link za nastavak i nacrt plana."},
+ {sec:"O tebi", id:"tel", type:"tel", req:true, q:"Broj telefona?", help:"Za kratak poziv ako nešto nije jasno."},
+ {sec:"O tebi", id:"kontakt", type:"multi", q:"Gde ti je najlakše da se čujemo?", opts:[["viber","Viber"],["whatsapp","WhatsApp"],["poziv","Običan poziv"],["mejl","Mejl"]]},
+ {sec:"O tebi", id:"grad", type:"text", q:"U kom gradu živiš i gde bi radila?", help:"Npr. Užice, posao u Užicu i online."},
+ {sec:"O tebi", id:"rodjena", type:"number", q:"Godina rođenja?", help:"Neki programi imaju uslove po godinama (npr. mlade preduzetnice do 35)."},
+ {sec:"O tebi", id:"iskustvo", type:"textarea", q:"Šta si do sada radila?", help:"Škola, poslovi, godine iskustva u ovom poslu. Od ovoga pravim CV koji banka traži."},
+
+ // 2. Šta ti treba
+ {sec:"Šta ti treba", id:"svrha", type:"multi", req:true, q:"Za šta ti treba biznis plan?", help:"Može više.", opts:[["kredit","Kredit u banci"],["grant","Grant ili subvencija"],["investitor","Investitor ili partner"],["sebe","Za sebe, da vidim da li se isplati"]]},
+ {sec:"Šta ti treba", id:"banka", type:"single", show:WANTS_LOAN, q:"Da li si već razgovarala sa bankom?", opts:[["nlb","Da, sa NLB bankom"],["druga","Da, sa drugom bankom"],["ne","Još nisam"]]},
+ {sec:"Šta ti treba", id:"banka_detalji", type:"textarea", show:a=>WANTS_LOAN(a)&&a.banka&&a.banka!=="ne", q:"Šta ti je banka rekla?", help:"Ime savetnice, ekspozitura, program (npr. SEF), koje dokumente traže, koji su rokovi."},
+ {sec:"Šta ti treba", id:"rok", type:"date", q:"Do kada ti treba plan?", help:"Ako nemaš rok, preskoči."},
+
+ // 3. Faza
+ {sec:"Faza biznisa", id:"faza", type:"single", req:true, q:"U kojoj si fazi?", opts:[
+   ["ideja","Imam ideju","Još ne radim i nemam firmu"],
+   ["neformalno","Već radim, bez firme","Imam kupce, ali nisam registrovana"],
+   ["pausal","Preduzetnica paušalka",""],
+   ["knjige","Preduzetnica koja vodi knjige",""],
+   ["doo","D.o.o.",""],
+   ["ne_znam","Ne znam tačno",""]]},
+ {sec:"Faza biznisa", id:"firma", type:"text", show:HAS_FIRM, q:"Kako se zove firma?", help:"Pun naziv iz APR-a."},
+ {sec:"Faza biznisa", id:"mb", type:"text", show:HAS_FIRM, q:"Matični broj i PIB?", help:"Ako nemaš pri ruci, preskoči. Vratiš se kasnije."},
+ {sec:"Faza biznisa", id:"osnovana", type:"date", show:HAS_FIRM, q:"Kada je firma osnovana?", help:"Banke često traže bar 6 ili 12 meseci rada. Datum menja model kredita."},
+ {sec:"Faza biznisa", id:"delatnost", type:"text", show:NOT_IDEA, q:"Koja je tvoja delatnost?", help:"Šifra ako je znaš (npr. 9602 frizerski saloni), ili opiši rečima."},
+ {sec:"Faza biznisa", id:"pdv", type:"single", show:HAS_FIRM, q:"Da li si u sistemu PDV-a?", opts:[["da","Da"],["ne","Ne"],["ne_znam","Ne znam"]]},
+ {sec:"Faza biznisa", id:"prostor", type:"single", q:"Gde radiš ili ćeš raditi?", opts:[["kuca","Kod kuće"],["zakup","U iznajmljenom prostoru"],["svoj","U svom prostoru"],["online","Samo online"],["teren","Na terenu, kod klijenata"]]},
+
+ // 4. Posao
+ {sec:"Tvoj posao", id:"opis", type:"textarea", q:"Opiši posao u 3 rečenice.", help:"Šta radiš, za koga, i zašto bi te izabrali. Kao da pričaš drugarici."},
+ {sec:"Tvoj posao", id:"ponuda", type:"textarea", q:"Šta tačno prodaješ i po kojoj ceni?", help:"Svaki proizvod ili usluga u svom redu. Npr. Šišanje 1.200 din, farbanje 3.500 din."},
+ {sec:"Tvoj posao", id:"kupci", type:"textarea", q:"Ko su tvoji kupci?", help:"Ko plaća: žene 30-50 iz grada, firme, turisti... I koliko ih je mesečno, ako znaš."},
+ {sec:"Tvoj posao", id:"top_kupci", type:"textarea", show:NOT_IDEA, q:"Ko su ti najveći kupci?", help:"Banka traži do 5 najvećih kupaca i koliki deo prihoda nose. Ako su fizička lica, napiši samo tip i procenat."},
+ {sec:"Tvoj posao", id:"dobavljaci", type:"textarea", q:"Od koga nabavljaš?", help:"Glavni dobavljači materijala, robe ili usluga. Do 5."},
+ {sec:"Tvoj posao", id:"kanal", type:"multi", q:"Kako te kupci nalaze?", opts:[["preporuka","Preporuka"],["instagram","Instagram / Facebook"],["oglasi","Plaćeni oglasi"],["lokal","Lokal ili izlog"],["sajt","Sajt / Google"],["firme","Direktno firmama"],["jos","Još nemam kupce"]]},
+ {sec:"Tvoj posao", id:"konkurencija", type:"textarea", q:"Ko još radi isto kao ti u tvom kraju?", help:"Imena ili broj. I po čemu si drugačija."},
+ {sec:"Tvoj posao", id:"tim", type:"single", q:"Ko radi sa tobom?", opts:[["sama","Radim sama"],["porodica","Pomaže porodica"],["saradnici","Imam saradnike"],["zaposleni","Imam zaposlene"]]},
+ {sec:"Tvoj posao", id:"tim_detalji", type:"textarea", show:a=>a.tim&&a.tim!=="sama", q:"Koliko ljudi i kako ih plaćaš?", help:"Ugovor, faktura, gotovina. Banka vidi sa računa kome ide novac, zato je bolje da znam unapred."},
+
+ // 5. Brojevi
+ {sec:"Brojevi do sada", id:"_brojevi", type:"info", show:NOT_IDEA, q:"Sada brojevi.", help:"Ovo je najvažniji deo za banku. Okvirno je u redu. Ako nemaš brojeve pri ruci, preskoči i vrati se kad pogledaš izvode."},
+ {sec:"Brojevi do sada", id:"prihod_mes", type:"months", show:NOT_IDEA, q:"Koliko ti je legalo na račun po mesecima?", help:"Poslednjih 12 meseci, u dinarima. Banka gleda svaki mesec posebno. Ako je neki mesec bio slab, ona računa po njemu. Zato mi treba svaki."},
+ {sec:"Brojevi do sada", id:"racun", type:"single", show:NOT_IDEA, q:"Gde ti legne novac od kupaca?", opts:[["poslovni","Sve na poslovni račun"],["delom","Delom na poslovni, delom gotovina ili lični"],["licni","Na lični račun ili gotovina"]]},
+ {sec:"Brojevi do sada", id:"banka_racun", type:"text", show:HAS_FIRM, q:"U kojoj banci ti je poslovni račun?"},
+ {sec:"Brojevi do sada", id:"troskovi", type:"rows", show:NOT_IDEA, q:"Koliko te košta posao mesečno?", help:"Okvirno, u dinarima. Prazno ako nemaš taj trošak.", rows:["Kirija","Materijal i roba","Plate i saradnici","Porez i doprinosi","Knjigovođa","Struja, internet, telefon","Reklame","Programi i aplikacije","Ostalo"]},
+ {sec:"Brojevi do sada", id:"licni_trosak", type:"single", show:NOT_IDEA, q:"Da li neke troškove posla plaćaš sa ličnog računa?", opts:[["ne","Ne, sve ide sa poslovnog"],["da","Da, deo"],["sve","Skoro sve"]]},
+ {sec:"Brojevi do sada", id:"podizes", type:"number", show:NOT_IDEA, q:"Koliko mesečno uzimaš iz posla za sebe i kuću?", help:"U dinarima. Banka upoređuje ovaj broj sa planom, pa mora biti realan, ne skroman."},
+ {sec:"Brojevi do sada", id:"domacinstvo", type:"number", q:"Koliko mesečno troši tvoje domaćinstvo?", help:"Hrana, računi, deca, kredit za stan. U dinarima, okvirno. Ulazi u proračun da li možeš da vraćaš ratu."},
+ {sec:"Brojevi do sada", id:"drugi_prihod", type:"text", q:"Imaš li još neki prihod?", help:"Plata, alimentacija, prihod partnera. Ako nemaš, preskoči."},
+
+ // 6. Kredit
+ {sec:"Kredit i ulaganje", id:"iznos", type:"number", req:false, q:"Koliko novca ti treba ukupno?", help:"U evrima. Uključi i svoj deo ako ga ulažeš."},
+ {sec:"Kredit i ulaganje", id:"namena", type:"rows", q:"Na šta ide novac?", help:"Okvirni iznos u evrima za svaku stavku.", rows:["Oprema i mašine","Vozilo","Adaptacija prostora","Roba i materijal","Marketing i sajt","Obrtna sredstva (kirija, plate prvih meseci)","Ostalo"]},
+ {sec:"Kredit i ulaganje", id:"profakture", type:"single", q:"Imaš li ponude ili profakture za to što kupuješ?", help:"Banka ih obično traži pre isplate.", opts:[["da","Da, za sve"],["delom","Za deo"],["ne","Još ne"]]},
+ {sec:"Kredit i ulaganje", id:"ucesce", type:"number", q:"Koliko svog novca možeš da uložiš?", help:"U evrima. Nula je u redu, samo napiši 0."},
+ {sec:"Kredit i ulaganje", id:"rata", type:"number", show:WANTS_LOAN, q:"Koliku ratu možeš mirno da plaćaš?", help:"U evrima mesečno. Mirno znači i u lošem mesecu."},
+ {sec:"Kredit i ulaganje", id:"dugovi", type:"multi", q:"Šta od ovoga već imaš?", help:"Banka to vidi u Kreditnom birou. Bolje da znam pre nje.", opts:[["kredit","Kredit (stambeni, gotovinski, za auto)"],["kartica","Kreditnu karticu"],["minus","Dozvoljeni minus"],["jemac","Jemac sam nekome"],["kasnila","Kasnila sam sa ratama u poslednje 2 godine"],["nista","Ništa od ovoga"]]},
+ {sec:"Kredit i ulaganje", id:"dugovi_detalji", type:"textarea", show:a=>(a.dugovi||[]).some(x=>x!=="nista"), q:"Koliko mesečno plaćaš za to i do kada?"},
+ {sec:"Kredit i ulaganje", id:"obezbedjenje", type:"multi", show:WANTS_LOAN, q:"Šta možeš da ponudiš kao garanciju?", opts:[["menice","Menice"],["vozilo","Vozilo"],["nekretnina","Nekretninu"],["jemac","Imam jemca"],["ne_znam","Ne znam"]]},
+ {sec:"Kredit i ulaganje", id:"efekat", type:"textarea", q:"Šta se menja kad dobiješ novac?", help:"Konkretno. Npr. nova mašina, 2 klijentkinje dnevno više, prihod sa 150.000 na 220.000 din mesečno."},
+
+ // 7. Plan
+ {sec:"Plan za napred", id:"cilj", type:"number", q:"Koliki mesečni prihod očekuješ za godinu dana?", help:"U dinarima. Realno, ne idealno."},
+ {sec:"Plan za napred", id:"sezona", type:"textarea", q:"Ima li tvoj posao jače i slabije mesece?", help:"Koje mesece i koliko slabije. Npr. jul i avgust upola manje."},
+ {sec:"Plan za napred", id:"rizik", type:"textarea", q:"Šta te najviše brine?", help:"Šta bi moglo da pođe po zlu. Banka to traži u SWOT analizi, a iskren odgovor jača plan."},
+ {sec:"Plan za napred", id:"zaposljavanje", type:"single", q:"Planiraš li da zaposliš nekog u naredne 2 godine?", opts:[["da","Da"],["mozda","Možda"],["ne","Ne"]]},
+
+ // 8. Dokumenta
+ {sec:"Dokumenta", id:"dokumenta", type:"multi", q:"Šta od dokumenata već imaš?", help:"Samo označi. Ne šalješ ništa sada.", opts:[["apr","Rešenje iz APR-a"],["pausal","Rešenje o paušalnom porezu"],["izvodi","Izvode sa računa za 6-12 meseci"],["kpo","KPO knjigu ili završni račun"],["poreska","Potvrdu da nemaš dug prema poreskoj"],["profakture","Profakture za kupovinu"],["ugovori","Ugovore sa kupcima ili dobavljačima"],["knjigovodja","Knjigovođu koji može brzo da pošalje papire"]]},
+
+ // 9. Kraj
+ {sec:"Za kraj", id:"nepoznato", type:"textarea", q:"Šta ti je najveća nepoznanica?", help:"Šta bi volela da ti neko objasni ili proveri."},
+ {sec:"Za kraj", id:"izvor", type:"single", q:"Kako si čula za mene?", opts:[["milica","Miličina priča na Instagramu"],["preporuka","Preporuka"],["drugo","Drugo"]]},
+ {sec:"Za kraj", id:"saglasnost", type:"consent", req:true, q:"Saglasnost", help:"Tvoje odgovore vidim samo ja (Milan Živković, Concendia) i koristim ih samo za tvoj biznis plan. Ne delim ih nikome bez tvoje dozvole. Možeš da tražiš da ih obrišem kad god želiš."},
+ {id:"_kraj", type:"end"}
+];
+
+/* ---------- Čuvanje ---------- */
+// Lokalno: browser. Na serveru (kad se odobri): Supabase RPC preko CONFIG.
+const CONFIG = { supabaseUrl:"https://tefkacbqzynzrifgmtpn.supabase.co", anonKey:"sb_publishable__XIJ9RUNhQzRC5Pi0uYWfg_5Ppkom5Y" };
+const LS_KEY = "bp-upitnik-v1";
+function newToken(){const a=new Uint8Array(12);crypto.getRandomValues(a);return Array.from(a,b=>b.toString(36).padStart(2,"0")).join("").slice(0,16)}
+function lsGet(){try{return JSON.parse(localStorage.getItem(LS_KEY)||"null")}catch(e){return null}}
+function lsSet(v){try{localStorage.setItem(LS_KEY,JSON.stringify(v))}catch(e){}}
+async function remoteLoad(token){
+  if(!CONFIG.supabaseUrl) return null;
+  const r=await fetch(CONFIG.supabaseUrl+"/rest/v1/rpc/bp_load",{method:"POST",headers:{apikey:CONFIG.anonKey,"Content-Type":"application/json"},body:JSON.stringify({p_token:token})});
+  return r.ok? await r.json(): null;
+}
+async function remoteSave(token,answers,submitted){
+  if(!CONFIG.supabaseUrl) return false;
+  const r=await fetch(CONFIG.supabaseUrl+"/rest/v1/rpc/bp_save",{method:"POST",headers:{apikey:CONFIG.anonKey,"Content-Type":"application/json"},body:JSON.stringify({p_token:token,p_answers:answers,p_submitted:submitted})});
+  return r.ok;
+}
+function tokenFromUrl(){const m=(location.hash||"").match(/^#k([a-z0-9]{10,})$/);return m?m[1]:null}
+
+let S = lsGet() || {};
+S.answers = S.answers || {};
+S.token = tokenFromUrl() || S.token || newToken();
+S.i = S.i || 0;
+S.submitted = !!S.submitted;
+const A = S.answers;
+
+let saveTimer=null;
+function save(){
+  S.updated = new Date().toISOString();
+  lsSet(S);
+  document.getElementById("saved").textContent="Sačuvano";
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{remoteSave(S.token,A,S.submitted).catch(()=>{})},800);
+}
+function personalLink(){
+  const base = CONFIG.supabaseUrl ? location.href.split("#")[0] : "(lični link radi kad upitnik bude objavljen)";
+  return CONFIG.supabaseUrl ? base+"#k"+S.token : base;
+}
+
+/* ---------- Logika ---------- */
+const visible = () => Q.filter(q => !q.show || q.show(A));
+function isAnswered(q){
+  const v=A[q.id];
+  if(q.type==="months"||q.type==="rows") return v && Object.values(v).some(x=>String(x).trim()!=="");
+  if(Array.isArray(v)) return v.length>0;
+  return v!==undefined && v!==null && String(v).trim()!=="";
+}
+const askable = q => !["intro","info","end"].includes(q.type);
+function stats(){
+  const v=visible().filter(askable);
+  return {total:v.length, done:v.filter(isAnswered).length};
+}
+
+/* ---------- Prikaz ---------- */
+const main=document.getElementById("main");
+const el=(t,attrs={},kids=[])=>{const e=document.createElement(t);for(const[k,v]of Object.entries(attrs)){if(k==="text")e.textContent=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else e.setAttribute(k,v)}kids.forEach(c=>c&&e.appendChild(c));return e};
+let mode="q"; // q | overview
+
+function render(){
+  const list=visible();
+  if(S.i>=list.length) S.i=list.length-1;
+  const q=list[S.i];
+  const st=stats();
+  document.getElementById("bar").style.width=Math.round(st.done/Math.max(1,st.total)*100)+"%";
+  document.getElementById("secname").textContent = mode==="overview" ? "Pregled" : (q.sec||"Upitnik za biznis plan");
+  main.innerHTML="";
+  const back=document.getElementById("back"), next=document.getElementById("next");
+  document.getElementById("err")?.remove();
+  if(mode==="overview"){ renderOverview(); back.disabled=false; back.textContent="Nazad"; next.textContent="Nastavi"; return }
+  back.disabled = S.i===0; back.textContent="Nazad";
+  const box=el("div",{class:"q"});
+  if(q.type==="intro"){
+    box.append(el("h1",{text:"Upitnik za tvoj biznis plan"}),
+      el("p",{class:"help",text:"Na osnovu tvojih odgovora pišem biznis plan za kredit, grant ili investitora. Pitanja su kratka. Treba ti oko 20 minuta, ali ne moraš sve odjednom."}),
+      el("p",{class:"help",text:"Sve se čuva samo od sebe. Prekini kad hoćeš i vrati se preko svog ličnog linka. Pitanje koje ne znaš preskoči, pa ga dopuni kasnije."}),
+      el("div",{class:"note"},[el("b",{text:"Važno: "}),document.createTextNode("plan pišem samo na osnovu stvarnih brojeva. Banka ih proverava na izvodima. Ako tražiš plan koji lepo izgleda, a ne slaže se sa računom, ovo nije za tebe.")]));
+    next.textContent= isAnswered(Q[1]) ? "Nastavi gde sam stala" : "Počni";
+  } else if(q.type==="end"){
+    const s=stats();
+    box.append(el("h1",{text: S.submitted? "Hvala, poslato." : "Skoro gotovo."}),
+      el("p",{class:"help",text:`Odgovorila si na ${s.done} od ${s.total} pitanja.`+(s.done<s.total?" Ostala možeš da dopuniš i posle slanja.":"")}),
+      el("p",{class:"help",text:"Javiću ti se u roku od 3 radna dana sa sledećim korakom i spiskom onoga što još fali."}));
+    box.append(linkBox());
+    next.textContent= S.submitted? "Pogledaj odgovore" : "Pošalji";
+  } else if(q.type==="info"){
+    box.append(el("h2",{text:q.q}),el("p",{class:"help",text:q.help}));
+    next.textContent="Dalje";
+  } else {
+    const ai=list.filter(askable).indexOf(q)+1, at=list.filter(askable).length;
+    box.append(el("div",{class:"num",text:`${ai} / ${at}`+(q.req?" · obavezno":"")}), el("h2",{text:q.q}));
+    if(q.help) box.append(el("p",{class:"help",text:q.help}));
+    box.append(input(q));
+    next.textContent= isAnswered(q)||q.req ? "Dalje" : "Preskoči";
+  }
+  main.append(box);
+  const f=box.querySelector("input,textarea,.opt"); if(f && window.innerWidth>700) f.focus();
+}
+
+function linkBox(){
+  const wrap=el("div");
+  wrap.append(el("p",{class:"help",text:"Tvoj lični link za nastavak. Sačuvaj ga ili ga pošalji sebi u poruci. Preko njega nastavljaš sa bilo kog telefona."}));
+  const inp=el("input",{type:"text",id:"plink",readonly:"",value:personalLink()});
+  const b=el("button",{class:"btn",type:"button",text:"Kopiraj",onclick:async()=>{try{await navigator.clipboard.writeText(inp.value);b.textContent="Kopirano"}catch(e){inp.select()}}});
+  wrap.append(el("div",{class:"linkbox"},[inp,b]));
+  return wrap;
+}
+
+function input(q){
+  const w=el("div",{class:"field"});
+  const set=v=>{A[q.id]=v;save();updateNext(q)};
+  const v=A[q.id];
+  if(["text","email","tel","number","date"].includes(q.type)){
+    const i=el("input",{type:q.type,id:"f_"+q.id,inputmode:q.type==="number"?"numeric":"",autocomplete:{ime:"name",email:"email",tel:"tel"}[q.id]||"off"});
+    if(v!=null) i.value=v;
+    i.addEventListener("input",()=>set(i.value));
+    i.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();go(1)}});
+    w.append(i);
+  } else if(q.type==="textarea"){
+    const t=el("textarea",{id:"f_"+q.id}); if(v) t.value=v;
+    t.addEventListener("input",()=>set(t.value));
+    w.append(t, el("div",{class:"hint",text:"Enter za novi red. Dugme Dalje za sledeće pitanje."}));
+  } else if(q.type==="single"||q.type==="multi"){
+    const keys="ABCDEFGH";
+    q.opts.forEach((o,ix)=>{
+      const on = q.type==="multi" ? (v||[]).includes(o[0]) : v===o[0];
+      const b=el("button",{class:"opt",type:"button","aria-pressed":String(on),id:`f_${q.id}_${o[0]}`},[el("span",{class:"k",text:keys[ix]}),el("span",{},[document.createTextNode(o[1]),o[2]?el("small",{text:o[2]}):null])]);
+      b.addEventListener("click",()=>{
+        if(q.type==="single"){ set(o[0]); render(); setTimeout(()=>go(1),220) }
+        else { let a=[...(A[q.id]||[])]; if(o[0]==="nista"||o[0]==="jos") a=a.includes(o[0])?[]:[o[0]]; else { a=a.filter(x=>x!=="nista"&&x!=="jos"); a=a.includes(o[0])?a.filter(x=>x!==o[0]):[...a,o[0]] } set(a); render() }
+      });
+      w.append(b);
+    });
+    if(q.type==="multi") w.append(el("div",{class:"hint",text:"Može više odgovora."}));
+  } else if(q.type==="months"){
+    const g=el("div",{class:"months"}); const now=new Date(); const val=v||{};
+    for(let k=12;k>=1;k--){
+      const d=new Date(now.getFullYear(),now.getMonth()-k,1);
+      const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+      const lab=d.toLocaleDateString("sr-Latn",{month:"long",year:"numeric"});
+      const i=el("input",{type:"number",inputmode:"numeric",id:`f_m_${key}`,placeholder:"din"}); if(val[key]!=null) i.value=val[key];
+      i.addEventListener("input",()=>{const nv={...(A[q.id]||{})};nv[key]=i.value;set(nv)});
+      g.append(el("label",{for:`f_m_${key}`},[document.createTextNode(lab),i]));
+    }
+    w.append(g);
+  } else if(q.type==="rows"){
+    const r=el("div",{class:"rows"}); const val=v||{};
+    q.rows.forEach((name,ix)=>{
+      const i=el("input",{type:"number",inputmode:"numeric",id:`f_${q.id}_${ix}`,"aria-label":name}); if(val[name]!=null) i.value=val[name];
+      i.addEventListener("input",()=>{const nv={...(A[q.id]||{})};nv[name]=i.value;set(nv)});
+      r.append(el("div",{class:"row"},[el("span",{class:"row-label",text:name}),i]));
+    });
+    w.append(r);
+  } else if(q.type==="consent"){
+    const b=el("button",{class:"opt",type:"button","aria-pressed":String(!!v),id:"f_saglasnost"},[el("span",{class:"k",text:v?"✓":""}),el("span",{text:"Slažem se"})]);
+    b.addEventListener("click",()=>{set(!A[q.id]);render()});
+    w.append(b);
+  }
+  return w;
+}
+
+function updateNext(q){ const n=document.getElementById("next"); if(askable(q)&&q.type!=="consent") n.textContent=isAnswered(q)||q.req?"Dalje":"Preskoči" }
+
+function renderOverview(){
+  const box=el("div",{class:"q"}); const s=stats();
+  box.append(el("h2",{text:"Šta je popunjeno"}),el("p",{class:"help",text:`${s.done} od ${s.total} pitanja. Dodirni deo da dopuniš.`}));
+  const secs={}; const list=visible();
+  list.forEach((q,ix)=>{ if(!askable(q))return; (secs[q.sec]=secs[q.sec]||{done:0,total:0,first:null,firstMiss:null}); const o=secs[q.sec]; o.total++; if(isAnswered(q))o.done++; else if(o.firstMiss===null)o.firstMiss=ix; if(o.first===null)o.first=ix });
+  const ov=el("div",{class:"over"});
+  Object.entries(secs).forEach(([name,o])=>{
+    const full=o.done===o.total;
+    ov.append(el("button",{type:"button",onclick:()=>{mode="q";S.i= full?o.first:o.firstMiss;save();render()}},[el("span",{text:name}),el("span",{class:"pill "+(full?"done":"miss"),text: full?"gotovo":`fali ${o.total-o.done}`})]));
+  });
+  box.append(ov, linkBox());
+  main.append(box);
+}
+
+function showErr(msg){document.getElementById("err")?.remove();const e=el("div",{class:"err",id:"err",text:msg});main.querySelector(".q")?.append(e)}
+
+function go(d){
+  if(mode==="overview"){ mode="q"; if(d>0){const l=visible();const m=l.findIndex(q=>askable(q)&&!isAnswered(q));S.i=m>=0?m:l.length-1} render(); return }
+  const list=visible(); const q=list[S.i];
+  if(d>0 && q.type==="end"){ if(!S.submitted){ if(!A.saglasnost||!A.ime||!A.email){ const l=visible(); S.i=l.findIndex(x=>x.req&&!isAnswered(x)); render(); showErr("Bez ovog ne mogu da sačuvam tvoje odgovore."); return } S.submitted=true; S.submittedAt=new Date().toISOString(); save(); render() } else { mode="overview"; render() } return }
+  if(d>0 && q.type==="intro" && isAnswered(Q[1])){ const m=list.findIndex(x=>askable(x)&&!isAnswered(x)); S.i = m>=0?m:list.length-1; save(); render(); return }
+  if(d>0 && q.req && !isAnswered(q)){ showErr(q.type==="consent"?"Potrebna je saglasnost da bih mogao da koristim odgovore.":(["ime","email","tel"].includes(q.id)?"Ovo mi treba da bih mogao da ti se javim.":"Ovo pitanje mi treba da znam kakav plan pravimo.")); return }
+  if(d>0 && q.type==="email" && A.email && !/^\S+@\S+\.\S+$/.test(A.email)){ showErr("Proveri mejl, nešto fali."); return }
+  S.i=Math.max(0,Math.min(list.length-1,S.i+d)); save(); render(); window.scrollTo(0,0);
+}
+
+document.getElementById("next").addEventListener("click",()=>go(1));
+document.getElementById("back").addEventListener("click",()=>{ if(mode==="overview"){mode="q";render()} else go(-1) });
+document.getElementById("overviewBtn").addEventListener("click",()=>{ mode= mode==="overview"?"q":"overview"; render() });
+document.addEventListener("keydown",e=>{
+  if(mode!=="q")return; const q=visible()[S.i]; if(!q||!q.opts)return;
+  if(["INPUT","TEXTAREA"].includes(document.activeElement?.tagName))return;
+  const ix="abcdefgh".indexOf(e.key.toLowerCase()); if(ix>=0&&q.opts[ix]) document.getElementById(`f_${q.id}_${q.opts[ix][0]}`)?.click();
+});
+
+if(!CONFIG.supabaseUrl) document.getElementById("demo").textContent="Probna verzija: odgovori se čuvaju samo u ovom pregledaču.";
+
+(async()=>{
+  const t=tokenFromUrl();
+  if(t){ try{ const r=await remoteLoad(t); if(r&&r.answers){ Object.assign(A,r.answers); S.submitted=!!r.submitted; lsSet(S) } }catch(e){} }
+  render();
+})();
+</script>
+
+</body></html>

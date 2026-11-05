@@ -151,8 +151,8 @@ const Q = [
 
  // 2. Šta ti treba
  {sec:"Šta ti treba", id:"svrha", type:"multi", req:true, q:"Za šta ti treba biznis plan?", help:"Može više.", opts:[["kredit","Kredit u banci"],["grant","Grant ili subvencija"],["investitor","Investitor ili partner"],["sebe","Za sebe, da vidim da li se isplati"]]},
- {sec:"Šta ti treba", id:"banka", type:"single", show:a=>WANTS_LOAN(a)||(a.svrha||[]).includes("grant"), q:"Da li je već bilo razgovora sa bankom ili fondom?", opts:[["nlb","Da, sa NLB bankom"],["druga","Da, sa drugom bankom"],["fond","Da, sa fondom ili programom za grantove"],["ne","Još ne"]]},
- {sec:"Šta ti treba", id:"banka_detalji", type:"textarea", show:a=>a.banka&&a.banka!=="ne", q:"Šta su ti rekli?", help:"Kontakt osoba, ekspozitura ili program (npr. SEF), koja dokumenta traže, koji su rokovi."},
+ {sec:"Šta ti treba", id:"banka", type:"multi", show:a=>(a.svrha||[]).some(x=>x!=="sebe"), q:"Sa kim je već bilo razgovora o novcu?", help:"Može više.", opts:[["banka","Banka"],["fond_razvoj","Fond za razvoj Republike Srbije"],["ras","Razvojna agencija Srbije (RAS)"],["inovacioni","Fond za inovacionu delatnost"],["nsz","Nacionalna služba za zapošljavanje (subvencija)"],["lokal","Opština ili grad"],["investitor","Investitor ili poslovni partner"],["nista","Još ni sa kim"]]},
+ {sec:"Šta ti treba", id:"banka_detalji", type:"textarea", show:a=>Array.isArray(a.banka)&&a.banka.some(x=>x!=="nista"), q:"Šta su ti rekli?", help:"Kontakt osoba, ekspozitura ili program (npr. SEF), koja dokumenta traže, koji su rokovi."},
  {sec:"Šta ti treba", id:"rok", type:"date", q:"Do kada ti treba plan?", help:"Ako nemaš rok, preskoči."},
 
  // 3. Faza

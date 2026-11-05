@@ -1,0 +1,19 @@
+@font-face{font-family:"Questrial";font-display:swap;src:url(fonts/questrial-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+1E00-1EFF}
+@font-face{font-family:"Questrial";font-display:swap;src:url(fonts/questrial-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+20AC}
+:root{color-scheme:dark;--bg:#0B0D0C;--card:#111A15;--ink:#F2EDE1;--ink2:#C4C9BF;--line:rgba(242,237,225,.12);--gold:#C9A24A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Questrial","Century Gothic","Avenir Next",system-ui,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+header img{height:26px;width:auto}
+header a{color:var(--ink2);font-size:14px}
+h1{font-weight:400;font-size:34px;line-height:1.2;margin:0 0 6px;text-wrap:balance}
+.meta{color:var(--ink2);font-size:14px;margin:0 0 32px}
+h2{font-weight:400;font-size:21px;color:var(--gold);margin:36px 0 8px}
+p,li{max-width:66ch;color:var(--ink)}
+ul{padding-left:20px}
+li{margin:4px 0}
+a{color:var(--gold)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}
+.box p{margin:4px 0}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--ink2);display:flex;gap:16px;flex-wrap:wrap}

@@ -1,8 +1,9 @@
 <!doctype html><html lang="sr-Latn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>Upitnik za biznis plan</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/znak.svg" type="image/svg+xml">
+<link rel="preload" href="bg-sm.jpg" as="image" media="(max-width:700px)">
 <style>
+@font-face{font-family:"Questrial";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/questrial-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Questrial";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/questrial-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 /* Layout: jedan ekran = jedno pitanje; crna podloga, tamnozelene kartice, zlatni akcenat */
 :root{
   color-scheme:dark;
@@ -95,12 +96,26 @@ input::placeholder,textarea::placeholder{color:rgba(242,237,225,.45)}
 .num{color:var(--accent);letter-spacing:.08em}
 .brandmark{display:inline-block;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:2px 10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
 @media (max-width:420px){.q{padding:22px 16px;border-radius:18px}h1{font-size:30px}}
+
+/* Pozadina: drvo, sa tamnim slojem za čitljivost */
+body{background:#050705 url(bg.jpg) center 62%/cover no-repeat fixed}
+@media (max-width:700px){body{background-image:url(bg-sm.jpg);background-attachment:scroll}}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,6,5,.55) 0%,rgba(4,6,5,.35) 45%,rgba(4,6,5,.70) 100%)}
+.app{position:relative}
+.q{background:rgba(9,15,12,.72);-webkit-backdrop-filter:blur(18px) saturate(115%);backdrop-filter:blur(18px) saturate(115%);border:1px solid rgba(242,237,225,.12);box-shadow:0 20px 60px -20px rgba(0,0,0,.7)}
+.help{color:rgba(242,237,225,.80)}
+.top{background:linear-gradient(to bottom,rgba(4,6,5,.85),rgba(4,6,5,0))}
+.logo{height:26px;width:auto;display:block}
+.legal{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:12.5px;color:rgba(242,237,225,.6);padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.legal a{color:rgba(242,237,225,.75)}
+.consent-links{font-size:14px;color:rgba(242,237,225,.75)}
+.consent-links a{color:var(--accent)}
 </style>
 
 </head><body>
-<canvas id="bg" aria-hidden="true"></canvas>
 <div class="app">
   <header class="top">
+    <div class="toprow" style="margin-bottom:10px"><img class="logo" src="brand/logo-svetli.svg" alt="Concendia"></div>
     <div class="toprow">
       <span class="sec" id="secname">Upitnik za biznis plan</span>
       <button class="linkbtn" id="overviewBtn" type="button">Pregled i nastavak</button>
@@ -114,6 +129,7 @@ input::placeholder,textarea::placeholder{color:rgba(242,237,225,.45)}
     <button class="btn primary" id="next" type="button">Dalje</button>
   </footer>
   <div class="demo" id="demo"></div>
+  <nav class="legal"><a href="privatnost.html">Politika privatnosti</a><a href="gdpr.html">Tvoja prava (GDPR)</a><span>Milan Živković PR Concendia</span></nav>
 </div>
 
 <script>
@@ -199,7 +215,7 @@ const Q = [
  // 9. Kraj
  {sec:"Za kraj", id:"nepoznato", type:"textarea", q:"Šta ti je najveća nepoznanica?", help:"Šta želiš da ti neko objasni ili proveri?"},
  {sec:"Za kraj", id:"izvor", type:"single", q:"Odakle znaš za mene?", opts:[["milica","Miličina priča na Instagramu"],["preporuka","Preporuka"],["drugo","Drugo"]]},
- {sec:"Za kraj", id:"saglasnost", type:"consent", req:true, q:"Saglasnost", help:"Tvoje odgovore vidim samo ja (Milan Živković, Concendia) i koristim ih samo za tvoj biznis plan. Ne delim ih nikome bez tvoje dozvole. Možeš da tražiš da ih obrišem kad god želiš."},
+ {sec:"Za kraj", id:"saglasnost", type:"consent", req:true, q:"Saglasnost", help:"Tvoje odgovore vidim samo ja (Milan Živković PR Concendia) i koristim ih samo za tvoj biznis plan. Ne delim ih nikome bez tvoje dozvole. Možeš da tražiš da ih obrišem kad god želiš."},
  {id:"_kraj", type:"end"}
 ];
 
@@ -275,7 +291,7 @@ function render(){
   back.disabled = S.i===0; back.textContent="Nazad";
   const box=el("div",{class:"q"});
   if(q.type==="intro"){
-    box.append(el("div",{},[el("span",{class:"brandmark",text:"Concendia"})]),el("h1",{text:"Upitnik za tvoj biznis plan"}),
+    box.append(el("h1",{text:"Upitnik za tvoj biznis plan"}),
       el("p",{class:"help",text:"Na osnovu tvojih odgovora pišem biznis plan za kredit, grant ili investitora. Pitanja su kratka. Treba ti oko 20 minuta, ali ne moraš sve odjednom."}),
       el("p",{class:"help",text:"Sve se čuva samo od sebe. Prekini kad hoćeš i vrati se preko svog ličnog linka. Pitanje koje ne znaš preskoči, pa ga dopuni kasnije."}),
       el("div",{class:"note"},[el("b",{text:"Važno: "}),document.createTextNode("daj tačne podatke. Banka, fond ili investitor ih proverava na izvodima i papirima. Plan pišem samo na osnovu stvarnih brojeva. Ako tražiš plan koji samo lepo izgleda, ovo nije za tebe.")]));
@@ -358,7 +374,7 @@ function input(q){
   } else if(q.type==="consent"){
     const b=el("button",{class:"opt",type:"button","aria-pressed":String(!!v),id:"f_saglasnost"},[el("span",{class:"k",text:v?"✓":""}),el("span",{text:"Slažem se"})]);
     b.addEventListener("click",()=>{set(!A[q.id]);render()});
-    w.append(b);
+    w.append(b, Object.assign(el("div",{class:"consent-links"}),{innerHTML:'Detalji: <a href="privatnost.html" target="_blank" rel="noopener">Politika privatnosti</a> i <a href="gdpr.html" target="_blank" rel="noopener">tvoja prava</a>.'}));
   }
   return w;
 }
@@ -410,48 +426,5 @@ if(!CONFIG.supabaseUrl) document.getElementById("demo").textContent="Probna verz
 </script>
 
 
-<script>
-/* Pozadina: tamne paprati, nacrtane jednom, zamućene */
-(function(){
-  const c=document.getElementById('bg'); if(!c||!c.getContext) return;
-  const ctx=c.getContext('2d'); let seed=7;
-  const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
-  function frond(x,y,len,ang,w,col){
-    ctx.save();ctx.translate(x,y);ctx.rotate(ang);
-    ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=Math.max(1.5,w*.06);
-    ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(len*.12,-len*.5,0,-len);ctx.stroke();
-    const n=Math.floor(len/(w*.32));
-    for(let i=2;i<n;i++){
-      const t=i/n, py=-len*t, px=Math.sin(t*Math.PI)*len*.06, lw=w*(1-t*.8)*(.85+rnd()*.3);
-      for(const s of [-1,1]){
-        ctx.beginPath();ctx.moveTo(px,py);
-        ctx.quadraticCurveTo(px+s*lw*.5,py-lw*.28,px+s*lw,py-lw*.42);
-        ctx.quadraticCurveTo(px+s*lw*.5,py-lw*.08,px,py+lw*.06);ctx.fill();
-      }
-    }
-    ctx.restore();
-  }
-  function draw(){
-    const dpr=Math.min(2,window.devicePixelRatio||1), W=innerWidth, H=innerHeight;
-    c.width=W*dpr;c.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);seed=7;
-    const g=ctx.createRadialGradient(W*.55,H*.35,0,W*.5,H*.5,Math.max(W,H)*.85);
-    g.addColorStop(0,'#14301F');g.addColorStop(.55,'#0B1A12');g.addColorStop(1,'#050806');
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-    const layers=[{b:14,a:.55,c:['#163A26','#1C4A2E'],k:7},{b:5,a:.75,c:['#1F5234','#2A6B40'],k:5},{b:1.2,a:.9,c:['#2F7A47','#3B8F55'],k:3}];
-    const S=Math.max(W,H);
-    layers.forEach(L=>{
-      ctx.filter='blur('+L.b+'px)';ctx.globalAlpha=L.a;
-      for(let i=0;i<L.k;i++){
-        const x=rnd()*W, y=H*(.55+rnd()*.7), len=S*(.45+rnd()*.5), ang=(rnd()-.5)*1.6, w=S*(.07+rnd()*.06);
-        frond(x,y,len,ang,w,L.c[i%2]);
-      }
-    });
-    ctx.filter='none';ctx.globalAlpha=1;
-    const v=ctx.createRadialGradient(W/2,H/2,S*.2,W/2,H/2,S*.8);
-    v.addColorStop(0,'rgba(5,8,6,.15)');v.addColorStop(1,'rgba(5,8,6,.85)');
-    ctx.fillStyle=v;ctx.fillRect(0,0,W,H);
-  }
-  let t;draw();addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,200)});
-})();
-</script>
+
 </body></html>

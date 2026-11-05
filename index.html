@@ -140,6 +140,7 @@ const WANTS_LOAN = a => (a.svrha||[]).includes("kredit");
 
 const Q = [
  {id:"_intro", type:"intro"},
+ {id:"_gate", type:"gate", sec:"Privatnost"},
  // 1. O tebi
  {sec:"O tebi", id:"ime", type:"text", req:true, q:"Kako se zoveš?", help:"Ime i prezime."},
  {sec:"O tebi", id:"email", type:"email", req:true, q:"Tvoj mejl?", help:"Na ovaj mejl ti šaljem nacrt plana."},
@@ -215,7 +216,6 @@ const Q = [
  // 9. Kraj
  {sec:"Za kraj", id:"nepoznato", type:"textarea", q:"Šta ti je najveća nepoznanica?", help:"Šta želiš da ti neko objasni ili proveri?"},
  {sec:"Za kraj", id:"izvor", type:"single", q:"Odakle znaš za mene?", opts:[["milica","Preko Milice Marković na Instagramu"],["preporuka","Preporuka"],["drugo","Drugo"]]},
- {sec:"Za kraj", id:"saglasnost", type:"consent", req:true, q:"Saglasnost", help:"Tvoje odgovore vidim samo ja (Milan Živković PR Concendia) i koristim ih samo za tvoj biznis plan. Ne delim ih nikome bez tvoje dozvole. Možeš da tražiš da ih obrišem kad god želiš."},
  {id:"_kraj", type:"end"}
 ];
 
@@ -248,10 +248,11 @@ const A = S.answers;
 let saveTimer=null;
 function save(){
   S.updated = new Date().toISOString();
+  if(A.saglasnost===false) return;
   lsSet(S);
   document.getElementById("saved").textContent="Sačuvano";
   clearTimeout(saveTimer);
-  saveTimer=setTimeout(()=>{remoteSave(S.token,A,S.submitted).catch(()=>{})},800);
+  if(A.saglasnost===true) saveTimer=setTimeout(()=>{remoteSave(S.token,A,S.submitted).catch(()=>{})},800);
 }
 function personalLink(){
   const base = CONFIG.supabaseUrl ? location.href.split("#")[0] : "(lični link radi kad upitnik bude objavljen)";
@@ -266,7 +267,8 @@ function isAnswered(q){
   if(Array.isArray(v)) return v.length>0;
   return v!==undefined && v!==null && String(v).trim()!=="";
 }
-const askable = q => !["intro","info","end"].includes(q.type);
+const askable = q => !["intro","info","end","gate"].includes(q.type);
+const IME_Q = () => Q.find(x=>x.id==="ime");
 function stats(){
   const v=visible().filter(askable);
   return {total:v.length, done:v.filter(isAnswered).length};
@@ -288,14 +290,31 @@ function render(){
   const back=document.getElementById("back"), next=document.getElementById("next");
   document.getElementById("err")?.remove();
   if(mode==="overview"){ renderOverview(); back.disabled=false; back.textContent="Nazad"; next.textContent="Nastavi"; return }
-  back.disabled = S.i===0; back.textContent="Nazad";
+  back.disabled = S.i===0; back.textContent="Nazad"; next.hidden=false;
   const box=el("div",{class:"q"});
   if(q.type==="intro"){
     box.append(el("h1",{text:"Upitnik za tvoj biznis plan"}),
       el("p",{class:"help",text:"Na osnovu tvojih odgovora pišem biznis plan za kredit, grant ili investitora. Pitanja su kratka. Treba ti oko 20 minuta, ali ne moraš sve odjednom."}),
       el("p",{class:"help",text:"Sve se čuva samo od sebe. Prekini kad hoćeš i vrati se preko svog ličnog linka. Pitanje koje ne znaš preskoči, pa ga dopuni kasnije."}),
       el("div",{class:"note"},[el("b",{text:"Važno: "}),document.createTextNode("daj tačne podatke. Banka, fond ili investitor ih proverava na izvodima i papirima. Plan pišem samo na osnovu stvarnih brojeva. Ako tražiš plan koji samo lepo izgleda, ovo nije za tebe.")]));
-    next.textContent= isAnswered(Q[1]) ? "Nastavi tamo gde je stalo" : "Počni";
+    next.textContent= isAnswered(IME_Q()) ? "Nastavi tamo gde je stalo" : "Počni";
+  } else if(q.type==="gate" && mode==="declined"){
+    box.append(el("h1",{text:"Poštujemo to i razumemo."}),
+      el("p",{class:"help",text:"Hvala ti na interesovanju. Tvoji odgovori se ne čuvaju i ništa nije poslato."}),
+      el("p",{class:"help",text:"Srećno sa prikupljanjem sredstava."}),
+      el("div",{class:"field"},[el("button",{class:"btn",type:"button",text:"Ipak želim da nastavim",onclick:()=>{mode="q";render()}})]));
+    back.disabled=true; next.hidden=true; document.getElementById("saved").textContent="";
+  } else if(q.type==="gate"){
+    box.append(el("h2",{text:"Tvoji podaci su na sigurnom"}),
+      el("p",{class:"help",text:"Strogo poštujemo Politiku privatnosti. Tvoje odgovore vidi samo Milan Živković. Koristimo ih samo za tvoj biznis plan, ne delimo ih ni sa kim bez tvoje dozvole i brišemo ih kad god to zatražiš."}),
+      el("p",{class:"help",text:"Zauzvrat te molimo za jedno: podeli iskreno i otvoreno kako stvari stoje, i ono što ide dobro i ono što ne ide. Plan je jak onoliko koliko su tačni podaci na kojima stoji."}),
+      Object.assign(el("p",{class:"consent-links"}),{innerHTML:'Pročitaj <a href="privatnost.html" target="_blank" rel="noopener">Politiku privatnosti</a> i <a href="gdpr.html" target="_blank" rel="noopener">svoja prava</a>.'}));
+    const yes=el("button",{class:"opt",type:"button","aria-pressed":String(A.saglasnost===true),id:"f_gate_da"},[el("span",{class:"k",text:A.saglasnost===true?"✓":"A"}),el("span",{text:"Pristajem i delim iskreno"})]);
+    const no=el("button",{class:"opt",type:"button",id:"f_gate_ne"},[el("span",{class:"k",text:"B"}),el("span",{text:"Ne pristajem"})]);
+    yes.addEventListener("click",()=>{A.saglasnost=true;A.saglasnost_at=new Date().toISOString();save();render();setTimeout(()=>go(1),220)});
+    no.addEventListener("click",()=>{A.saglasnost=false;delete A.saglasnost_at;try{localStorage.removeItem(LS_KEY)}catch(e){};mode="declined";render()});
+    box.append(el("div",{class:"field"},[yes,no]));
+    next.textContent="Dalje";
   } else if(q.type==="end"){
     const s=stats();
     box.append(el("h1",{text: S.submitted? "Hvala, poslato." : "Još jedan korak."}),
@@ -398,10 +417,12 @@ function renderOverview(){
 function showErr(msg){document.getElementById("err")?.remove();const e=el("div",{class:"err",id:"err",text:msg});main.querySelector(".q")?.append(e)}
 
 function go(d){
+  if(mode==="declined") return;
   if(mode==="overview"){ mode="q"; if(d>0){const l=visible();const m=l.findIndex(q=>askable(q)&&!isAnswered(q));S.i=m>=0?m:l.length-1} render(); return }
   const list=visible(); const q=list[S.i];
-  if(d>0 && q.type==="end"){ if(!S.submitted){ if(!A.saglasnost||!A.ime||!A.email){ const l=visible(); S.i=l.findIndex(x=>x.req&&!isAnswered(x)); render(); showErr("Bez ovog ne mogu da sačuvam tvoje odgovore."); return } S.submitted=true; S.submittedAt=new Date().toISOString(); save(); render() } else { mode="overview"; render() } return }
-  if(d>0 && q.type==="intro" && isAnswered(Q[1])){ const m=list.findIndex(x=>askable(x)&&!isAnswered(x)); S.i = m>=0?m:list.length-1; save(); render(); return }
+  if(d>0 && q.type==="end"){ if(!S.submitted){ if(!A.saglasnost||!A.ime||!A.email){ const l=visible(); S.i= A.saglasnost!==true ? l.findIndex(x=>x.type==="gate") : l.findIndex(x=>x.req&&!isAnswered(x)); render(); showErr("Bez ovog ne mogu da sačuvam tvoje odgovore."); return } S.submitted=true; S.submittedAt=new Date().toISOString(); save(); render() } else { mode="overview"; render() } return }
+  if(d>0 && q.type==="intro" && isAnswered(IME_Q()) && A.saglasnost===true){ const m=list.findIndex(x=>askable(x)&&!isAnswered(x)); S.i = m>=0?m:list.length-1; save(); render(); return }
+  if(d>0 && q.type==="gate" && A.saglasnost!==true){ showErr("Izaberi jedan od dva odgovora."); return }
   if(d>0 && q.req && !isAnswered(q)){ showErr(q.type==="consent"?"Potrebna je saglasnost da bih mogao da koristim odgovore.":(["ime","email","tel"].includes(q.id)?"Ovo mi treba da bih mogao da ti se javim.":"Ovo pitanje mi treba da znam kakav plan pravimo.")); return }
   if(d>0 && q.type==="email" && A.email && !/^\S+@\S+\.\S+$/.test(A.email)){ showErr("Proveri mejl, nešto fali."); return }
   S.i=Math.max(0,Math.min(list.length-1,S.i+d)); save(); render(); window.scrollTo(0,0);
@@ -409,7 +430,7 @@ function go(d){
 
 document.getElementById("next").addEventListener("click",()=>go(1));
 document.getElementById("back").addEventListener("click",()=>{ if(mode==="overview"){mode="q";render()} else go(-1) });
-document.getElementById("overviewBtn").addEventListener("click",()=>{ mode= mode==="overview"?"q":"overview"; render() });
+document.getElementById("overviewBtn").addEventListener("click",()=>{ if(mode==="declined")return; mode= mode==="overview"?"q":"overview"; render() });
 document.addEventListener("keydown",e=>{
   if(mode!=="q")return; const q=visible()[S.i]; if(!q||!q.opts)return;
   if(["INPUT","TEXTAREA"].includes(document.activeElement?.tagName))return;
